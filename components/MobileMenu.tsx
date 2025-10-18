@@ -14,6 +14,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     { name: "Ambulance", number: "101" },
     { name: "Emergency Police", number: "108" },
     { name: "Police", number: "100" },
+    { name: "Fire Station", number: "101" },
     { name: "Cyber Crime", number: "1930" },
     { name: "Women Helpline", number: "100" },
     { name: "Child Helpline", number: "1930" },

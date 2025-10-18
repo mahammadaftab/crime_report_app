@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import { Providers } from "./providers";
+import { EmergencyDetector } from "../components/EmergencyDetector";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -65,6 +66,9 @@ export default function RootLayout({
             <div className="absolute top-1/3 left-1/4 h-[600px] w-[600px] rounded-full bg-sky-500/20 blur-[150px] animate-pulse" />
             <div className="absolute bottom-1/4 right-1/4 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[180px] animate-pulse delay-700" />
           </div>
+
+          {/* Emergency Detector - Always active for automatic emergency detection */}
+          <EmergencyDetector />
 
           {/* Navbar */}
           <Navbar />

@@ -21,9 +21,10 @@ export default function Navbar() {
   ];
 
   const emergencyContacts = [
-    { name: "Ambulance", number: "101" },
-    { name: "Emergency Police", number: "108" },
+    { name: "Ambulance", number: "108" },
+    { name: "Emergency Police", number: "112" },
     { name: "Police", number: "100" },
+    { name: "Fire Station", number: "101" },
     { name: "Cyber Crime", number: "1930" },
     { name: "Women Helpline", number: "100" },
     { name: "Child Helpline", number: "1930" },

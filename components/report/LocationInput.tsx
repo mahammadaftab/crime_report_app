@@ -14,13 +14,11 @@ const AddressAutofill = dynamic(
 interface LocationInputProps {
   value: string;
   onChange: (value: string) => void;
-  onCoordinatesChange?: (lat: number | null, lng: number | null) => void;
 }
 
 export function LocationInput({
   value,
   onChange,
-  onCoordinatesChange,
 }: LocationInputProps) {
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -72,8 +70,8 @@ export function LocationInput({
       );
 
       const { latitude, longitude } = position.coords;
-      onCoordinatesChange?.(latitude, longitude);
-      onChange(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+      // Instead of converting to coordinates, we'll use a readable address format
+      onChange(`Current Location (${latitude.toFixed(6)}, ${longitude.toFixed(6)})`);
     } catch (error) {
       console.error("Location error:", error);
       setLocationError(
@@ -87,19 +85,48 @@ export function LocationInput({
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium text-zinc-400">
-        Location
+        Location (Area/Street) *
       </label>
       <div className="relative">
         {isClient ? (
           <AddressAutofill
             accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ""}
+            options={{
+              types: ['address', 'neighborhood', 'locality', 'place', 'district', 'region'],
+              language: 'en',
+            }}
+            onRetrieve={(e) => {
+              const feature = e.features[0];
+              if (feature) {
+                // Create a more detailed location string with area information
+                const placeName = feature.place_name || feature.text || '';
+                const context = feature.context || [];
+                
+                // Extract area-specific information
+                const neighborhood = context.find(c => c.id.includes('neighborhood'));
+                const locality = context.find(c => c.id.includes('locality'));
+                const place = context.find(c => c.id.includes('place'));
+                const region = context.find(c => c.id.includes('region'));
+                
+                // Build a detailed location string
+                let locationString = placeName;
+                
+                // Add more specific area details if available
+                if (neighborhood && !placeName.includes(neighborhood.text)) {
+                  locationString = `${neighborhood.text}, ${locationString}`;
+                }
+                
+                onChange(locationString);
+              }
+            }}
           >
             <input
+              id="location"
               type="text"
               autoComplete="street-address"
               value={value}
               onChange={(e) => onChange(e.target.value)}
-              placeholder="Enter location or use pin"
+              placeholder="Enter specific area/street name or use pin"
               className="w-full rounded-xl bg-zinc-900/50 border border-zinc-800 pl-4 pr-12 py-3.5
                        text-white transition-colors duration-200
                        focus:outline-none focus:ring-2 focus:ring-sky-500/40"
@@ -107,10 +134,11 @@ export function LocationInput({
           </AddressAutofill>
         ) : (
           <input
+            id="location"
             type="text"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="Enter location"
+            placeholder="Enter specific area/street name"
             className="w-full rounded-xl bg-zinc-900/50 border border-zinc-800 pl-4 pr-12 py-3.5
                      text-white transition-colors duration-200
                      focus:outline-none focus:ring-2 focus:ring-sky-500/40"
@@ -170,6 +198,9 @@ export function LocationInput({
           )}
         </button>
       </div>
+      <p className="text-xs text-zinc-500 mt-1">
+        Include specific area, street, or landmark for better accuracy
+      </p>
       {locationError && (
         <p className="text-sm text-red-400 flex items-center gap-2">
           <svg
@@ -183,7 +214,7 @@ export function LocationInput({
               strokeLinejoin="round"
               strokeWidth={2}
               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
+              />
           </svg>
           {locationError}
         </p>

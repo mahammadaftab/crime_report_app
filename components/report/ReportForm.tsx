@@ -26,18 +26,14 @@ export function ReportForm({ onComplete }: ReportFormProps) {
     location: "",
     description: "",
     title: "",
+    reporterName: "",
+    reporterPhone: "",
   });
   const [image, setImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [coordinates, setCoordinates] = useState<{
-    latitude: number | null;
-    longitude: number | null;
-  }>({
-    latitude: null,
-    longitude: null,
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -115,6 +111,14 @@ export function ReportForm({ onComplete }: ReportFormProps) {
       return;
     }
     
+    // Validate that location is required
+    if (!formData.location.trim()) {
+      setLocationError("Please fill in the location");
+      // Scroll to location section
+      document.querySelector('[for="location"]')?.closest(".space-y-2")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
@@ -125,10 +129,10 @@ export function ReportForm({ onComplete }: ReportFormProps) {
         title: formData.title,
         description: formData.description,
         location: formData.location,
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
         image: image,
         status: "PENDING",
+        reporterName: formData.reporterName,
+        reporterPhone: formData.reporterPhone,
       };
 
       const response = await fetch("/api/reports/create", {
@@ -347,18 +351,34 @@ export function ReportForm({ onComplete }: ReportFormProps) {
       </div>
 
       {/* Location */}
-      <LocationInput
-        value={formData.location}
-        onChange={(value) =>
-          setFormData((prev) => ({ ...prev, location: value }))
-        }
-        onCoordinatesChange={(lat, lng) =>
-          setCoordinates({
-            latitude: lat,
-            longitude: lng,
-          })
-        }
-      />
+      <div>
+        <LocationInput
+          value={formData.location}
+          onChange={(value) => {
+            setFormData((prev) => ({ ...prev, location: value }));
+            // Clear location error when user starts typing
+            if (locationError) setLocationError(null);
+          }}
+        />
+        {locationError && (
+          <p className="text-sm text-red-400 flex items-center gap-2 mt-2">
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            {locationError}
+          </p>
+        )}
+      </div>
 
       {/* Title */}
       <div>
@@ -394,6 +414,47 @@ export function ReportForm({ onComplete }: ReportFormProps) {
                    focus:outline-none focus:ring-2 focus:ring-sky-500/40"
           required
         />
+      </div>
+
+      {/* Reporter Details Section */}
+      <div className="border-t border-zinc-800 pt-6">
+        <h3 className="text-lg font-medium text-white mb-4">Complaint Person Details</h3>
+        
+        {/* Reporter Name */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-zinc-400 mb-2">
+            Full Name *
+          </label>
+          <input
+            type="text"
+            value={formData.reporterName}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, reporterName: e.target.value }))
+            }
+            className="w-full rounded-xl bg-zinc-900/50 border border-zinc-800 px-4 py-3.5
+                     text-white transition-colors duration-200
+                     focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+            required
+          />
+        </div>
+
+        {/* Reporter Phone */}
+        <div>
+          <label className="block text-sm font-medium text-zinc-400 mb-2">
+            Phone Number *
+          </label>
+          <input
+            type="tel"
+            value={formData.reporterPhone}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, reporterPhone: e.target.value }))
+            }
+            className="w-full rounded-xl bg-zinc-900/50 border border-zinc-800 px-4 py-3.5
+                     text-white transition-colors duration-200
+                     focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+            required
+          />
+        </div>
       </div>
 
       {/* Submit Button */}

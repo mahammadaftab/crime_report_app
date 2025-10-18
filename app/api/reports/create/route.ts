@@ -11,10 +11,10 @@ export async function POST(request: Request) {
       title,
       description,
       location,
-      latitude,
-      longitude,
       image,
       status,
+      reporterName,
+      reporterPhone,
     } = await request.json();
 
     const report = await prisma.report.create({
@@ -25,10 +25,10 @@ export async function POST(request: Request) {
         description,
         reportType: specificType,
         location,
-        latitude: latitude || null,
-        longitude: longitude || null,
         image: image || null,
         status: status || "PENDING",
+        reporterName: reporterName || null,
+        reporterPhone: reporterPhone || null,
       },
     });
 
