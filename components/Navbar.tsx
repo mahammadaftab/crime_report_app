@@ -1,13 +1,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MobileMenu from "./MobileMenu";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   const navLinks = [
@@ -17,6 +19,32 @@ export default function Navbar() {
     { href: "/resources", label: "Resources" },
     { href: "/contact", label: "Contact" },
   ];
+
+  const emergencyContacts = [
+    { name: "Ambulance", number: "101" },
+    { name: "Emergency Police", number: "108" },
+    { name: "Police", number: "100" },
+    { name: "Cyber Crime", number: "1930" },
+    { name: "Women Helpline", number: "100" },
+    { name: "Child Helpline", number: "1930" },
+  ];
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,7 +89,7 @@ export default function Navbar() {
                 </svg>
               </motion.div>
               <span className="text-lg font-semibold text-white tracking-wide">
-                SafeReport
+                PublicSafe App
               </span>
             </Link>
 
@@ -93,16 +121,63 @@ export default function Navbar() {
 
             {/* Emergency + Mobile Menu */}
             <div className="flex items-center space-x-4">
-              <motion.a
-                href="tel:911"
-                whileHover={{ scale: 1.05 }}
-                className="group flex h-9 items-center gap-2 rounded-full bg-red-500/10 pl-4 pr-5 text-sm font-medium text-red-500 
-                           ring-1 ring-inset ring-red-500/20 hover:bg-red-500/20 hover:shadow-lg hover:shadow-red-500/30 transition-all"
-              >
-                <span className="h-2 w-2 rounded-full bg-red-500 animate-ping absolute" />
-                <span className="h-2 w-2 rounded-full bg-red-500 relative" />
-                Emergency: 911
-              </motion.a>
+              {/* Emergency Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="group flex h-9 items-center gap-2 rounded-full bg-red-500/10 pl-4 pr-5 text-sm font-medium text-red-500 
+                             ring-1 ring-inset ring-red-500/20 hover:bg-red-500/20 hover:shadow-lg hover:shadow-red-500/30 transition-all"
+                >
+                  <span className="h-2 w-2 rounded-full bg-red-500 animate-ping absolute" />
+                  <span className="h-2 w-2 rounded-full bg-red-500 relative" />
+                  Emergency
+                  <svg
+                    className={`w-4 h-4 ml-1 transition-transform duration-200 ${
+                      isDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </motion.button>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 mt-2 w-64 bg-zinc-900 border border-zinc-800 rounded-xl shadow-xl z-50 overflow-hidden"
+                    >
+                      <div className="py-2">
+                        {emergencyContacts.map((contact, index) => (
+                          <a
+                            key={index}
+                            href={`tel:${contact.number}`}
+                            className="flex items-center justify-between px-4 py-3 text-sm text-zinc-300 hover:bg-red-500/10 hover:text-white transition-colors"
+                            onClick={() => setIsDropdownOpen(false)}
+                          >
+                            <span>{contact.name}</span>
+                            <span className="font-medium text-red-500">
+                              {contact.number}
+                            </span>
+                          </a>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               {/* Mobile Menu Button */}
               <button
@@ -145,7 +220,7 @@ export default function Navbar() {
       {/* Mobile Menu Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <MobileMenu onClose={() => setIsMobileMenuOpen(false)} />
+          <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
         )}
       </AnimatePresence>
     </>

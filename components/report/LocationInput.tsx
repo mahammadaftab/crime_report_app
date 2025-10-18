@@ -1,6 +1,15 @@
 // @ts-nocheck
-import { useState } from "react";
-import { AddressAutofill } from "@mapbox/search-js-react";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import the Mapbox component with ssr disabled
+const AddressAutofill = dynamic(
+  () => import("@mapbox/search-js-react").then((mod) => mod.AddressAutofill),
+  {
+    ssr: false,
+    loading: () => <div>Loading map...</div>,
+  }
+);
 
 interface LocationInputProps {
   value: string;
@@ -15,13 +24,18 @@ export function LocationInput({
 }: LocationInputProps) {
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const getLocation = async () => {
     setIsGettingLocation(true);
     setLocationError(null);
 
     try {
-      if (!navigator.geolocation) {
+      if (typeof window === "undefined" || !navigator.geolocation) {
         throw new Error("Geolocation is not supported by your browser");
       }
 
@@ -76,20 +90,32 @@ export function LocationInput({
         Location
       </label>
       <div className="relative">
-        <AddressAutofill
-          accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ""}
-        >
+        {isClient ? (
+          <AddressAutofill
+            accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ""}
+          >
+            <input
+              type="text"
+              autoComplete="street-address"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Enter location or use pin"
+              className="w-full rounded-xl bg-zinc-900/50 border border-zinc-800 pl-4 pr-12 py-3.5
+                       text-white transition-colors duration-200
+                       focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+            />
+          </AddressAutofill>
+        ) : (
           <input
             type="text"
-            autoComplete="street-address"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="Enter location or use pin"
+            placeholder="Enter location"
             className="w-full rounded-xl bg-zinc-900/50 border border-zinc-800 pl-4 pr-12 py-3.5
                      text-white transition-colors duration-200
                      focus:outline-none focus:ring-2 focus:ring-sky-500/40"
           />
-        </AddressAutofill>
+        )}
         <button
           type="button"
           onClick={getLocation}

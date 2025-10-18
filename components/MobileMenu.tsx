@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -6,6 +7,35 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
+  const emergencyRef = useRef<HTMLDivElement>(null);
+
+  const emergencyContacts = [
+    { name: "Ambulance", number: "101" },
+    { name: "Emergency Police", number: "108" },
+    { name: "Police", number: "100" },
+    { name: "Cyber Crime", number: "1930" },
+    { name: "Women Helpline", number: "100" },
+    { name: "Child Helpline", number: "1930" },
+  ];
+
+  // Handle click outside to close emergency dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (emergencyRef.current && !emergencyRef.current.contains(event.target as Node)) {
+        setIsEmergencyOpen(false);
+      }
+    };
+
+    if (isEmergencyOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isEmergencyOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -76,6 +106,52 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             >
               Contact
             </Link>
+
+            {/* Emergency Dropdown for Mobile */}
+            <div className="border-t border-zinc-800 pt-4" ref={emergencyRef}>
+              <button
+                onClick={() => setIsEmergencyOpen(!isEmergencyOpen)}
+                className="flex items-center justify-between w-full text-sm text-zinc-400 hover:text-white transition-colors"
+              >
+                <span>Emergency Contacts</span>
+                <svg
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isEmergencyOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {isEmergencyOpen && (
+                <div className="mt-3 space-y-2 pl-2">
+                  {emergencyContacts.map((contact, index) => (
+                    <a
+                      key={index}
+                      href={`tel:${contact.number}`}
+                      className="flex items-center justify-between text-xs text-zinc-500 hover:text-red-400 transition-colors"
+                      onClick={() => {
+                        onClose();
+                        setIsEmergencyOpen(false);
+                      }}
+                    >
+                      <span>{contact.name}</span>
+                      <span className="font-medium text-red-500">
+                        {contact.number}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
         </div>
       </div>

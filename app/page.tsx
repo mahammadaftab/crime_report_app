@@ -1,6 +1,19 @@
 import Link from "next/link";
+import prisma from "@/lib/prisma";
 
-export default function Home() {
+async function getReportCount() {
+  try {
+    const count = await prisma.report.count();
+    return count;
+  } catch (error) {
+    console.error("Error fetching report count:", error);
+    return 0;
+  }
+}
+
+export default async function Home() {
+  const reportCount = await getReportCount();
+
   return (
     <main className="relative px-6 pt-32">
       <div className="mx-auto max-w-6xl">
@@ -150,7 +163,7 @@ export default function Home() {
         <div className="mt-40 rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-800 p-10 shadow-lg ring-1 ring-white/10">
           <div className="grid gap-y-8 sm:grid-cols-3">
             {[
-              { value: "100K+", label: "Reports Filed" },
+              { value: reportCount.toLocaleString(), label: "Reports Filed" },
               { value: "100%", label: "Anonymity Rate" },
               { value: "24/7", label: "Support Available" },
             ].map((stat, i) => (

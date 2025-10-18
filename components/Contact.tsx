@@ -90,7 +90,7 @@ export default function Contact() {
             </div>
             <div>
               <p className="text-neutral-400 text-sm">Phone</p>
-              <p className="text-white font-medium">+91 98765 43210</p>
+              <p className="text-white font-medium">+91 89705 80082</p>
             </div>
           </div>
 
@@ -101,7 +101,7 @@ export default function Contact() {
             <div>
               <p className="text-neutral-400 text-sm">Address</p>
               <p className="text-white font-medium">
-                Mumbai, Maharashtra, India
+                Gadag, Karnataka, India
               </p>
             </div>
           </div>

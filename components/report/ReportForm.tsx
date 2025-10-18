@@ -37,11 +37,21 @@ export function ReportForm({ onComplete }: ReportFormProps) {
     longitude: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageError, setImageError] = useState<string | null>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Check file type
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      setImageError("Please upload a valid image file (jpg, jpeg, png, or gif)");
+      return;
+    }
+
+    // Clear any previous error
+    setImageError(null);
     setIsAnalyzing(true);
 
     try {
@@ -67,9 +77,14 @@ export function ReportForm({ onComplete }: ReportFormProps) {
           specificType: data.reportType,
         }));
         setImage(base64 as string);
+        // Clear any previous error when image is successfully uploaded
+        setImageError(null);
       }
     } catch (error) {
       console.error("Error analyzing image:", error);
+      setImageError("Failed to analyze image. Please try another image.");
+      // Clear the image state when there's an error
+      setImage(null);
     } finally {
       setIsAnalyzing(false);
     }
@@ -88,6 +103,18 @@ export function ReportForm({ onComplete }: ReportFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate that an image is required
+    if (!image) {
+      // Show popup alert
+      alert("Image is required to submit the report");
+      
+      // Also show inline error and scroll to image section
+      setImageError("Image upload is required to submit the report");
+      document.getElementById("image-upload")?.closest(".relative")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
@@ -121,6 +148,8 @@ export function ReportForm({ onComplete }: ReportFormProps) {
       onComplete(result);
     } catch (error) {
       console.error("Error submitting report:", error);
+      // Show error to user
+      alert("Failed to submit report. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -201,6 +230,7 @@ export function ReportForm({ onComplete }: ReportFormProps) {
           onChange={handleImageUpload}
           className="hidden"
           id="image-upload"
+          required
         />
         <label
           htmlFor="image-upload"
@@ -237,6 +267,9 @@ export function ReportForm({ onComplete }: ReportFormProps) {
               <p className="text-sm text-zinc-400">
                 Drop an image here or click to upload
               </p>
+              <p className="text-xs text-zinc-500 mt-2">
+                Required: JPG, JPEG, PNG, or GIF
+              </p>
             </div>
           )}
         </label>
@@ -268,6 +301,24 @@ export function ReportForm({ onComplete }: ReportFormProps) {
               </span>
             </div>
           </div>
+        )}
+        {imageError && (
+          <p className="text-sm text-red-400 flex items-center gap-2 mt-2">
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            {imageError}
+          </p>
         )}
       </div>
 
