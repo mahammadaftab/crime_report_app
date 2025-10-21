@@ -86,10 +86,13 @@ export async function POST(request: Request) {
     }
 
     // 🔹 6. Send OTP email (skip for admin users in development)
+    let emailSent = false;
     if (userRole !== "ADMIN") {
       try {
         await sendOTPEmail(email, otp);
-      } catch (emailError) {
+        console.log(`📧 Resent OTP email to user: ${email} with OTP: ${otp}`);
+        emailSent = true;
+      } catch (emailError: any) {
         console.error("❌ Failed to send OTP email:", emailError);
         // Don't fail the request if email sending fails, but log it
       }
@@ -100,7 +103,9 @@ export async function POST(request: Request) {
       {
         message: userRole === "ADMIN"
           ? "Admin OTP is 111111. Use this for verification."
-          : "New verification code sent to your email.",
+          : emailSent 
+            ? "New verification code sent to your email."
+            : "Verification code generated. Please check your email (you may need to check spam folder).",
       },
       200
     );

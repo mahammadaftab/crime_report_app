@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, AlertCircle, Info } from "lucide-react";
 
 export default function UserVerifyEmail() {
   const router = useRouter();
@@ -67,7 +67,7 @@ export default function UserVerifyEmail() {
 
       if (!response.ok) throw new Error(data.message || "Failed to resend OTP");
 
-      alert("OTP has been resent to your email.");
+      alert("OTP has been resent to your email. Please check your inbox and spam folder.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to resend OTP");
     } finally {
@@ -176,6 +176,19 @@ export default function UserVerifyEmail() {
                   {error}
                 </motion.div>
               )}
+
+              {/* Info about email */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-start gap-2 text-blue-400 text-sm bg-blue-500/10 border border-blue-500/30 rounded-lg p-3"
+              >
+                <Info size={16} className="mt-0.5 flex-shrink-0" />
+                <div>
+                  <p>Didn't receive the email? Check your spam folder.</p>
+                  <p className="mt-1">If you're still having issues, contact support.</p>
+                </div>
+              </motion.div>
 
               {/* Submit */}
               <motion.button

@@ -120,9 +120,11 @@ export async function POST(request: Request) {
     if (userRole !== "ADMIN") {
       try {
         await sendOTPEmail(email, otp);
-      } catch (emailError) {
+        console.log(`📧 OTP email sent to user: ${email} with OTP: ${otp}`);
+      } catch (emailError: any) {
         console.error("❌ Failed to send OTP email:", emailError);
-        // Don't fail the signup if email sending fails, but log it
+        // Log the error but don't fail the signup process
+        // The user can still verify manually or request a new OTP
       }
     }
 

@@ -10,6 +10,9 @@ export async function sendOTPEmail(email: string, otp: string): Promise<void> {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    // Add debugging options
+    logger: true,
+    debug: process.env.NODE_ENV === "development",
   });
 
   // Define email options
@@ -37,10 +40,12 @@ export async function sendOTPEmail(email: string, otp: string): Promise<void> {
 
   // Send the email
   try {
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
     console.log(`📧 OTP email sent successfully to ${email}`);
-  } catch (error) {
+    console.log(`📧 Message ID: ${info.messageId}`);
+  } catch (error: any) {
     console.error("❌ Failed to send OTP email:", error);
-    throw new Error("Failed to send verification email");
+    // Re-throw the error so the calling function can handle it appropriately
+    throw new Error(`Failed to send verification email: ${error.message || error}`);
   }
 }

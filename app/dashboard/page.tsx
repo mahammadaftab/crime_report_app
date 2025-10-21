@@ -121,17 +121,7 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent">
             Admin Dashboard
           </h1>
-          <div className="flex items-center gap-6">
-            <span className="text-neutral-400">
-              {session?.user?.name || "Admin"}
-            </span>
-            <button
-              onClick={() => signOut()}
-              className="px-4 py-2 text-sm font-medium text-neutral-300 bg-neutral-900 rounded-lg hover:bg-neutral-800 border border-neutral-800 transition-all hover:border-neutral-700"
-            >
-              Sign out
-            </button>
-          </div>
+         
         </div>
       </nav>
 

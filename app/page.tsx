@@ -7,12 +7,19 @@ async function getReportCount() {
     return count;
   } catch (error) {
     console.error("Error fetching report count:", error);
+    // Return a default value when database is not accessible
     return 0;
   }
 }
 
 export default async function Home() {
-  const reportCount = await getReportCount();
+  let reportCount;
+  try {
+    reportCount = await getReportCount();
+  } catch (error) {
+    console.error("Error fetching report count:", error);
+    reportCount = 0;
+  }
 
   return (
     <main className="relative px-6 pt-32">
@@ -163,7 +170,7 @@ export default async function Home() {
         <div className="mt-40 rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-800 p-10 shadow-lg ring-1 ring-white/10">
           <div className="grid gap-y-8 sm:grid-cols-3">
             {[
-              { value: reportCount.toLocaleString(), label: "Reports Filed" },
+              { value: reportCount?.toLocaleString() || "0", label: "Reports Filed" },
               { value: "100%", label: "Anonymity Rate" },
               { value: "24/7", label: "Support Available" },
             ].map((stat, i) => (
