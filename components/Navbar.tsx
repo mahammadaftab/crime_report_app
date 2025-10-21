@@ -23,7 +23,7 @@ export default function Navbar() {
     { href: "/track-report", label: "Track Report" },
     { href: "/how-it-works", label: "How It Works" },
     { href: "/resources", label: "Resources" },
-    { href: "/contact", label: "Contact" },
+    { href: "/contact", label: "Support" },
   ];
 
   const emergencyContacts = [
