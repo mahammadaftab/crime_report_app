@@ -67,6 +67,17 @@ This is a state-of-the-art anonymous reporting system built with Next.js 14, des
 - GeminiAI
 - BCrypt for Password Encryption
 
+## <a name="features">🔋 Features</a>
+
+- **Anonymous Reporting**: Users can submit incident reports without revealing their identity
+- **Email Verification**: Secure signup process with email verification using OTP
+- **Role-based Access Control**: Admin dashboard for managing reports and user roles
+- **AI-powered Analysis**: GeminiAI integration for analyzing report content
+- **Location-based Reporting**: Mapbox integration for precise incident location
+- **Report Tracking**: Unique tracking IDs for following up on submitted reports
+- **Secure Authentication**: NextAuth.js with email/password authentication
+- **Responsive Design**: Mobile-friendly interface for all devices
+
 ## <a name="quick-start">🤸 Quick Start</a>
 
 **Prerequisites**

@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { sendOTPEmail } from "@/lib/email";
 
 // Utility: standardized API responses
 function response(
@@ -16,6 +17,12 @@ function response(
     },
     { status, headers }
   );
+}
+
+// Generate a 6-digit OTP
+function generateOTP(): string {
+  // Generate a random 6-digit number
+  return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 export async function POST(request: Request) {
@@ -36,13 +43,18 @@ export async function POST(request: Request) {
       return response({ error: "Password must be at least 8 characters long." }, 400);
     }
 
-    // 🔹 2. Check if user exists
+    // 🔹 2. Check if user exists in either User or Admin table
     const existingUser = await prisma.user.findUnique({
       where: { email },
       select: { id: true },
     });
 
-    if (existingUser) {
+    const existingAdmin = await prisma.admin.findUnique({
+      where: { email },
+      select: { id: true },
+    });
+
+    if (existingUser || existingAdmin) {
       return response({ error: "User with this email already exists." }, 409);
     }
 
@@ -53,27 +65,73 @@ export async function POST(request: Request) {
     const allowedRoles = ["ADMIN", "MODERATOR", "USER"] as const;
     const userRole = allowedRoles.includes(role) ? role : "USER";
 
-    // 🔹 5. Create user
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        password: hashedPassword,
-        role: userRole,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-      },
-    });
+    // 🔹 5. Generate OTP for email verification
+    // For admin users, use default OTP 111111 for testing
+    // For regular users, generate a random OTP
+    const otp = userRole === "ADMIN" ? "111111" : generateOTP();
+    const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
 
-    // 🔹 6. Return safe response
+    let user;
+    
+    // 🔹 6. Create user or admin with verification data
+    if (userRole === "ADMIN") {
+      // Create admin user
+      const admin = await prisma.admin.create({
+        data: {
+          email,
+          name,
+          password: hashedPassword,
+          role: userRole,
+          verificationOTP: otp,
+          otpExpiresAt: otpExpiresAt,
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          createdAt: true,
+        },
+      });
+      user = admin;
+    } else {
+      // Create regular user
+      const regularUser = await prisma.user.create({
+        data: {
+          email,
+          name,
+          password: hashedPassword,
+          role: userRole,
+          verificationOTP: otp,
+          otpExpiresAt: otpExpiresAt,
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          createdAt: true,
+        },
+      });
+      user = regularUser;
+    }
+
+    // 🔹 7. Send OTP email (skip for admin users in development)
+    if (userRole !== "ADMIN") {
+      try {
+        await sendOTPEmail(email, otp);
+      } catch (emailError) {
+        console.error("❌ Failed to send OTP email:", emailError);
+        // Don't fail the signup if email sending fails, but log it
+      }
+    }
+
+    // 🔹 8. Return safe response
     return response(
       {
-        message: "User registered successfully.",
+        message: userRole === "ADMIN" 
+          ? "Admin user registered successfully. Use OTP 111111 for verification." 
+          : "User registered successfully. Please check your email for verification.",
         user,
       },
       201

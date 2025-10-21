@@ -5,17 +5,29 @@ import { useEffect, useState } from "react";
 import { Report, ReportStatus, ReportType } from "@prisma/client";
 import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [reports, setReports] = useState<Report[]>([]);
   const [filter, setFilter] = useState<ReportStatus | "ALL">("ALL");
   const [typeFilter, setTypeFilter] = useState<ReportType | "ALL">("ALL");
   const [isLoading, setIsLoading] = useState(true);
 
+  // Redirect unauthenticated users to sign in
   useEffect(() => {
-    fetchReports();
-  }, []);
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+    }
+  }, [status, router]);
+
+  // Fetch reports when user is authenticated
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchReports();
+    }
+  }, [status]);
 
   const fetchReports = async () => {
     setIsLoading(true);
@@ -47,14 +59,13 @@ export default function Dashboard() {
     }
   };
 
-      const filteredReports = Array.isArray(reports)
-      ? reports.filter((report) => {
-      const statusMatch = filter === "ALL" || report.status === filter;
-      const typeMatch = typeFilter === "ALL" || report.type === typeFilter;
-      return statusMatch && typeMatch;
-
-  })
-      : [];
+  const filteredReports = Array.isArray(reports)
+    ? reports.filter((report) => {
+        const statusMatch = filter === "ALL" || report.status === filter;
+        const typeMatch = typeFilter === "ALL" || report.type === typeFilter;
+        return statusMatch && typeMatch;
+      })
+    : [];
 
   const getStatusColor = (status: ReportStatus) => {
     const colors = {
@@ -84,8 +95,8 @@ export default function Dashboard() {
     },
   ];
 
-
-  if (isLoading) {
+  // Show loading state
+  if (status === "loading" || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
         <motion.div
@@ -95,6 +106,11 @@ export default function Dashboard() {
         />
       </div>
     );
+  }
+
+  // Show nothing if not authenticated
+  if (status !== "authenticated") {
+    return null;
   }
 
   return (
