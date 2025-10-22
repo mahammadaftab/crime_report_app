@@ -232,7 +232,7 @@ export default function Dashboard() {
                             setZoomedImage(report.image || "");
                           }}
                         />
-                        <p className="text-xs text-neutral-500 mt-1 text-center">Click to zoom</p>
+                        <p className="text-xs text-neutral-500 mt-1 text-center">Click Here Report Details</p>
                       </div>
                     )}
                   </div>
