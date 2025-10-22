@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [filter, setFilter] = useState<ReportStatus | "ALL">("ALL");
   const [typeFilter, setTypeFilter] = useState<ReportType | "ALL">("ALL");
   const [isLoading, setIsLoading] = useState(true);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
   // Redirect unauthenticated users to sign in
   useEffect(() => {
@@ -190,7 +191,8 @@ export default function Dashboard() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="bg-neutral-900/60 backdrop-blur-md rounded-xl p-6 border border-white/10 hover:border-sky-500/30 transition-all"
+                className="bg-neutral-900/60 backdrop-blur-md rounded-xl p-6 border border-white/10 hover:border-sky-500/30 transition-all cursor-pointer"
+                onClick={() => router.push(`/dashboard/reports/${report.reportId}`)}
               >
                 <div className="flex justify-between items-start gap-6">
                   <div className="space-y-4 flex-1">
@@ -220,23 +222,32 @@ export default function Dashboard() {
                     </div>
 
                     {report.image && (
-                      <img
-                        src={report.image}
-                        alt="Report"
-                        className="mt-4 rounded-lg border border-neutral-800"
-                      />
+                      <div className="relative">
+                        <img
+                          src={report.image}
+                          alt="Report"
+                          className="mt-4 rounded-lg border border-neutral-800 max-h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setZoomedImage(report.image || "");
+                          }}
+                        />
+                        <p className="text-xs text-neutral-500 mt-1 text-center">Click to zoom</p>
+                      </div>
                     )}
                   </div>
 
                   <select
                     value={report.status}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      e.stopPropagation();
                       updateReportStatus(
                         report.id,
                         e.target.value as ReportStatus
-                      )
-                    }
+                      );
+                    }}
                     className="bg-neutral-900 border border-neutral-800 text-neutral-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500/20"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {Object.values(ReportStatus).map((status) => (
                       <option key={status} value={status}>
@@ -256,6 +267,41 @@ export default function Dashboard() {
           )}
         </div>
       </main>
+
+      {/* Image Zoom Modal - Full Screen */}
+      <AnimatePresence>
+        {zoomedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black z-[100] flex items-center justify-center p-0"
+            onClick={() => setZoomedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              className="relative w-full h-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={zoomedImage}
+                alt="Incident"
+                className="w-full h-full object-contain"
+              />
+              <button
+                onClick={() => setZoomedImage(null)}
+                className="absolute top-6 right-6 bg-black/50 hover:bg-black/70 text-white rounded-full p-3 transition-colors z-[101]"
+              >
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
