@@ -5,9 +5,9 @@ async function createCustomAdmin() {
   const prisma = new PrismaClient();
   
   // Get email and password from command line arguments
-  const email = process.argv[2] || 'admin123@gmail.com';
-  const password = process.argv[3] || 'Admin@123';
-  const name = process.argv[4] || 'ADMIN MOOSA';
+  const email = process.argv[2] || 'aftab123@gmail.com';
+  const password = process.argv[3] || 'Aftab@123';
+  const name = process.argv[4] || 'Mahammad Aftab';
   
   try {
     // Hash the password
