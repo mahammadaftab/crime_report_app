@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { sendOTPEmail } from "@/lib/email";
 
 export default function TestEmailPage() {
   const [email, setEmail] = useState("");
@@ -18,21 +17,34 @@ export default function TestEmailPage() {
     setResult(null);
 
     try {
-      // Generate a test OTP
-      const testOTP = Math.floor(100000 + Math.random() * 900000).toString();
-      
-      // Send the email
-      await sendOTPEmail(email, testOTP);
-      
-      setResult({ 
-        success: true, 
-        message: `Test email sent successfully to ${email} with OTP: ${testOTP}` 
+      // Call the API route instead of directly using nodemailer
+      const response = await fetch("/api/test-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
       });
-    } catch (error: any) {
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setResult({ 
+          success: true, 
+          message: `Test email sent successfully to ${email} with OTP: ${data.otp}` 
+        });
+      } else {
+        setResult({ 
+          success: false, 
+          message: `Failed to send email: ${data.error || "Unknown error"}` 
+        });
+      }
+    } catch (error: unknown) {
       console.error("Email sending error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       setResult({ 
         success: false, 
-        message: `Failed to send email: ${error.message || "Unknown error"}` 
+        message: `Failed to send email: ${errorMessage}` 
       });
     } finally {
       setIsSending(false);

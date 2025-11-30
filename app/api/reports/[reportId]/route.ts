@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { reportId: string } }
+  { params }: { params: Promise<{ reportId: string }> }
 ) {
   try {
     const session = await getServerSession();
@@ -13,8 +13,10 @@ export async function PATCH(
     }
 
     const { status } = await request.json();
+    const { reportId } = await params;
+
     const report = await prisma.report.update({
-      where: { id: params.reportId },
+      where: { id: reportId },
       data: { status },
     });
 

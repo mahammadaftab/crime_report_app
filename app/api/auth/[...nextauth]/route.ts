@@ -34,7 +34,7 @@ export const authOptions: AuthOptions = {
       },
       from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
       // Custom email verification
-      sendVerificationRequest: async ({ identifier, url, provider }) => {
+      sendVerificationRequest: async ({ identifier, provider }) => {
         const transporter = provider.server;
         const email = identifier;
         
@@ -179,7 +179,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user }) {
       // Add user information to the token
       if (user) {
         token.id = user.id;
@@ -192,13 +192,13 @@ export const authOptions: AuthOptions = {
     async session({ session, token }) {
       // Add token information to the session
       if (session?.user) {
-        // @ts-ignore
+        // @ts-expect-error - Adding custom properties to session user
         session.user.id = token.id;
-        // @ts-ignore
+        // @ts-expect-error - Adding custom properties to session user
         session.user.email = token.email;
-        // @ts-ignore
+        // @ts-expect-error - Adding custom properties to session user
         session.user.name = token.name;
-        // @ts-ignore
+        // @ts-expect-error - Adding custom properties to session user
         session.user.role = token.role;
       }
       return session;

@@ -43,9 +43,10 @@ export async function sendOTPEmail(email: string, otp: string): Promise<void> {
     const info = await transporter.sendMail(mailOptions);
     console.log(`📧 OTP email sent successfully to ${email}`);
     console.log(`📧 Message ID: ${info.messageId}`);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("❌ Failed to send OTP email:", error);
     // Re-throw the error so the calling function can handle it appropriately
-    throw new Error(`Failed to send verification email: ${error.message || error}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to send verification email: ${errorMessage}`);
   }
 }
