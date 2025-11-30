@@ -76,7 +76,7 @@ export default function Navbar() {
             : "bg-black/40 backdrop-blur-md border-b border-transparent"
         }`}
       >
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3 group">
@@ -98,7 +98,7 @@ export default function Navbar() {
                   />
                 </svg>
               </motion.div>
-              <span className="text-lg font-semibold text-white tracking-wide">
+              <span className="text-lg font-semibold text-white tracking-wide hidden sm:block">
                 PublicSafe App
               </span>
             </Link>

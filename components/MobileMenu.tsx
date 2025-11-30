@@ -54,7 +54,28 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       {/* Menu content */}
       <div className="fixed right-0 top-0 h-full w-64 bg-zinc-900 p-6 shadow-xl">
         <div className="flex flex-col space-y-6">
-          <div className="flex justify-between items-center">
+          {/* App Logo and Name in Mobile Menu */}
+          <div className="flex justify-between items-center pt-2">
+            <Link href="/" className="flex items-center space-x-2 group" onClick={onClose}>
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center shadow-md">
+                <svg
+                  className="h-4 w-4 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
+              </div>
+              <span className="text-base font-semibold text-white tracking-wide">
+                PublicSafe App
+              </span>
+            </Link>
             <button
               onClick={onClose}
               className="p-2 text-zinc-400 hover:text-white"
@@ -73,25 +94,25 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 />
               </svg>
             </button>
-            
-            {/* Profile section for mobile */}
-            {session && (
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white text-xs font-medium">
-                  {session.user?.name?.charAt(0).toUpperCase() || "U"}
-                </div>
-                <button
-                  onClick={() => {
-                    signOut();
-                    onClose();
-                  }}
-                  className="text-xs text-zinc-400 hover:text-sky-400 transition-colors"
-                >
-                  Sign Out
-                </button>
-              </div>
-            )}
           </div>
+
+          {/* Profile section for mobile */}
+          {session && (
+            <div className="flex items-center space-x-2 pb-2 border-b border-zinc-800">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white text-xs font-medium">
+                {session.user?.name?.charAt(0).toUpperCase() || "U"}
+              </div>
+              <button
+                onClick={() => {
+                  signOut();
+                  onClose();
+                }}
+                className="text-xs text-zinc-400 hover:text-sky-400 transition-colors"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
 
           <nav className="flex flex-col space-y-4">
             {/* Auth Dropdown for mobile */}

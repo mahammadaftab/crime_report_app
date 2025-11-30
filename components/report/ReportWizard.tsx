@@ -22,9 +22,9 @@ export function ReportWizard() {
   };
 
   return (
-    <div className="rounded-2xl bg-neutral-900/60 backdrop-blur-xl border border-white/10 p-8 shadow-2xl">
+    <div className="rounded-xl bg-neutral-900/60 backdrop-blur-xl border border-white/10 p-4 shadow-xl sm:rounded-2xl sm:p-6 md:p-8">
       {/* Stepper Progress */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6 sm:mb-8">
         {steps.map((step, idx) => {
           const isActive = currentStep === step.id;
           const isCompleted = currentStep > step.id;
@@ -33,7 +33,7 @@ export function ReportWizard() {
             <div key={step.id} className="flex items-center w-full">
               {/* Step Circle */}
               <div
-                className={`flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-medium transition-all ${
+                className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-medium transition-all sm:h-10 sm:w-10 sm:text-sm ${
                   isActive
                     ? "border-sky-500 bg-sky-500/20 text-sky-400"
                     : isCompleted
@@ -44,25 +44,41 @@ export function ReportWizard() {
                 {step.id}
               </div>
 
-              {/* Step Title */}
-              <div className="ml-3">
-                <p
-                  className={`text-sm font-medium ${
-                    isActive
-                      ? "text-white"
-                      : isCompleted
-                      ? "text-emerald-400"
-                      : "text-neutral-500"
-                  }`}
-                >
-                  {step.title}
-                </p>
-              </div>
+              {/* Step Title - Hidden on mobile for first step to save space */}
+              {step.id === 1 ? (
+                <div className="ml-2 sm:ml-3">
+                  <p
+                    className={`text-xs font-medium sm:text-sm ${
+                      isActive
+                        ? "text-white"
+                        : isCompleted
+                        ? "text-emerald-400"
+                        : "text-neutral-500"
+                    }`}
+                  >
+                    {step.title}
+                  </p>
+                </div>
+              ) : (
+                <div className="ml-2 sm:ml-3">
+                  <p
+                    className={`text-xs font-medium sm:text-sm ${
+                      isActive
+                        ? "text-white"
+                        : isCompleted
+                        ? "text-emerald-400"
+                        : "text-neutral-500"
+                    }`}
+                  >
+                    {step.title}
+                  </p>
+                </div>
+              )}
 
               {/* Connector Line */}
               {idx < steps.length - 1 && (
                 <div
-                  className={`flex-1 h-0.5 mx-4 ${
+                  className={`flex-1 h-0.5 mx-2 sm:mx-4 ${
                     isCompleted ? "bg-emerald-500" : "bg-neutral-800"
                   }`}
                 />
@@ -76,10 +92,10 @@ export function ReportWizard() {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentStep}
-          initial={{ opacity: 0, x: 30 }}
+          initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -30 }}
-          transition={{ duration: 0.3 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.2 }}
         >
           {currentStep === 1 && <ReportForm onComplete={handleStepComplete} />}
           {currentStep === 2 && (

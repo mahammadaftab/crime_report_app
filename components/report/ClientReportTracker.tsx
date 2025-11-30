@@ -14,7 +14,7 @@ interface ReportDetails {
   location: string;
 }
 
-export function ReportTracker() {
+export function ClientReportTracker() {
   const searchParams = useSearchParams();
   const [reportId, setReportId] = useState("");
   const [error, setError] = useState("");
@@ -59,7 +59,8 @@ export function ReportTracker() {
       }
       const data = await response.json();
       setReportDetails(data);
-    } catch {
+    } catch (error) {
+      console.error("Error fetching report:", error);
       setError("Unable to find report. Please check the ID and try again.");
     } finally {
       setLoading(false);

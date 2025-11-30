@@ -22,13 +22,13 @@ export default async function Home() {
   }
 
   return (
-    <main className="relative px-6 pt-32">
+    <main className="relative px-4 pt-20 pb-12 sm:px-6 sm:pt-24 md:pt-32 md:pb-16">
       <div className="mx-auto max-w-6xl">
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center">
-          <div className="relative inline-flex h-9 items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 text-sm text-sky-400 backdrop-blur-sm shadow-md">
+          <div className="relative inline-flex h-7 items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-2.5 text-xs text-sky-400 backdrop-blur-sm shadow-md sm:h-8 sm:px-3 sm:text-sm">
             <svg
-              className="h-4 w-4"
+              className="h-3 w-3 sm:h-4 sm:w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -43,22 +43,22 @@ export default async function Home() {
             Secure & Anonymous Reporting
           </div>
 
-          <h1 className="mt-10 bg-gradient-to-r from-white via-sky-200 to-white bg-clip-text text-6xl font-extrabold tracking-tight text-transparent sm:text-7xl leading-tight">
+          <h1 className="mt-6 bg-gradient-to-r from-white via-sky-200 to-white bg-clip-text text-3xl font-extrabold tracking-tight text-transparent sm:text-4xl md:text-5xl lg:text-6xl leading-tight">
             Report Incident.
             <span className="block animate-gradient bg-gradient-to-r from-sky-400 via-blue-500 to-sky-600 bg-clip-text text-transparent">
               Protect Identity.
             </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-400 sm:max-w-2xl sm:text-base sm:mt-4 md:text-lg">
             Make your community safer without compromising your safety. Our
             advanced encryption ensures your identity remains completely
             anonymous.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-4">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <Link href={"/submit-report"}>
-              <button className="group relative flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 px-8 text-sm font-medium text-white shadow-lg shadow-sky-500/30 transition-all hover:scale-105 hover:shadow-sky-500/50">
+              <button className="group relative flex h-10 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-sky-500 to-blue-600 px-5 text-sm font-medium text-white shadow-lg shadow-sky-500/30 transition-all hover:scale-105 hover:shadow-sky-500/50 sm:h-11 sm:px-6">
                 Make Anonymous Report
                 <svg
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
@@ -76,7 +76,7 @@ export default async function Home() {
               </button>
             </Link>
             <Link href={"/how-it-works"}>
-              <button className="flex h-12 items-center justify-center gap-2 rounded-xl bg-white/5 px-8 text-sm font-medium text-white ring-1 ring-inset ring-white/10 transition-all hover:bg-white/10 hover:scale-105">
+              <button className="flex h-10 items-center justify-center gap-2 rounded-lg bg-white/5 px-5 text-sm font-medium text-white ring-1 ring-inset ring-white/10 transition-all hover:bg-white/10 hover:scale-105 sm:h-11 sm:px-6">
                 How it Works
               </button>
             </Link>
@@ -84,7 +84,7 @@ export default async function Home() {
         </div>
 
         {/* Features Grid */}
-        <div className="mt-40 grid gap-6 sm:grid-cols-3">
+        <div className="mt-12 grid gap-3 sm:gap-5 sm:grid-cols-3 md:mt-16">
           {[
             {
               title: "Military-Grade Encryption",
@@ -92,7 +92,7 @@ export default async function Home() {
                 "Your identity is protected with state-of-the-art encryption protocols",
               icon: (
                 <svg
-                  className="h-6 w-6 text-sky-400"
+                  className="h-5 w-5 text-sky-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -112,7 +112,7 @@ export default async function Home() {
                 "Instant verification and secure routing of all reports",
               icon: (
                 <svg
-                  className="h-6 w-6 text-sky-400"
+                  className="h-5 w-5 text-sky-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -131,7 +131,7 @@ export default async function Home() {
               description: "Two-way anonymous channel with law enforcement",
               icon: (
                 <svg
-                  className="h-6 w-6 text-sky-400"
+                  className="h-5 w-5 text-sky-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -148,17 +148,17 @@ export default async function Home() {
           ].map((feature, i) => (
             <div
               key={i}
-              className="group relative overflow-hidden rounded-2xl bg-zinc-900/80 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:bg-zinc-800/90 hover:shadow-lg hover:shadow-sky-500/20"
+              className="group relative overflow-hidden rounded-xl bg-zinc-900/80 p-5 sm:p-6 md:p-7 backdrop-blur-sm transition-all hover:scale-[1.02] hover:bg-zinc-800/90 hover:shadow-lg hover:shadow-sky-500/20"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-sky-500/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
               <div className="relative">
-                <div className="mb-5 inline-flex rounded-xl bg-sky-500/10 p-3 group-hover:bg-sky-500/20 transition">
+                <div className="mb-3 inline-flex rounded-lg bg-sky-500/10 p-2 group-hover:bg-sky-500/20 transition sm:mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="mb-3 text-lg font-semibold text-white">
+                <h3 className="mb-2 text-base font-semibold text-white sm:mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-zinc-400">
+                <p className="text-xs leading-relaxed text-zinc-400 sm:text-sm">
                   {feature.description}
                 </p>
               </div>
@@ -167,26 +167,26 @@ export default async function Home() {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-40 rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-800 p-10 shadow-lg ring-1 ring-white/10">
-          <div className="grid gap-y-8 sm:grid-cols-3">
+        <div className="mt-12 rounded-xl bg-gradient-to-br from-zinc-900 to-zinc-800 p-5 sm:p-6 md:p-8 md:mt-16 shadow-lg ring-1 ring-white/10">
+          <div className="grid gap-y-5 sm:grid-cols-3">
             {[
               { value: reportCount?.toLocaleString() || "0", label: "Reports Filed" },
               { value: "100%", label: "Anonymity Rate" },
               { value: "24/7", label: "Support Available" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="text-4xl font-extrabold text-white">
+                <div className="text-2xl font-extrabold text-white sm:text-3xl">
                   {stat.value}
                 </div>
-                <div className="mt-1 text-sm text-zinc-400">{stat.label}</div>
+                <div className="mt-1 text-xs text-zinc-400 sm:text-sm">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Trust Badge */}
-        <div className="mt-40 mb-20 flex justify-center">
-          <div className="inline-flex items-center gap-3 rounded-full bg-zinc-900/80 px-6 py-3 text-sm text-zinc-400 ring-1 ring-white/10 shadow-lg backdrop-blur-sm">
+        <div className="mt-12 mb-10 flex justify-center md:mt-16">
+          <div className="inline-flex items-center gap-2 rounded-full bg-zinc-900/80 px-3 py-2 text-xs text-zinc-400 ring-1 ring-white/10 shadow-lg backdrop-blur-sm sm:px-5 sm:py-2.5 sm:text-sm">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             Trusted by Law Enforcement Nationwide
           </div>
