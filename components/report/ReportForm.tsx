@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { LocationInput } from "./LocationInput";
 import crypto from "crypto";
+import Image from "next/image";
 
 const REPORT_TYPES = [
   "Theft",
@@ -16,7 +17,7 @@ const REPORT_TYPES = [
 type ReportType = "EMERGENCY" | "NON_EMERGENCY";
 
 interface ReportFormProps {
-  onComplete: (data: any) => void;
+  onComplete: (data: unknown) => void;
 }
 
 export function ReportForm({ onComplete }: ReportFormProps) {
@@ -245,10 +246,11 @@ export function ReportForm({ onComplete }: ReportFormProps) {
           {image ? (
             <div className="space-y-4">
               <div className="w-full h-48 relative rounded-lg overflow-hidden">
-                <img
+                <Image
                   src={image}
                   alt="Preview"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <p className="text-sm text-zinc-400">Click to change image</p>

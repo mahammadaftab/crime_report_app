@@ -17,7 +17,6 @@ export async function GET(
     }
 
     // Check if user is admin
-    // @ts-ignore
     if (session.user?.role !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -35,7 +34,7 @@ export async function GET(
     }
 
     return NextResponse.json(report);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching report details:", error);
     return NextResponse.json(
       { error: "Failed to fetch report details" },
@@ -55,7 +54,6 @@ export async function PATCH(
     }
 
     // Check if user is admin
-    // @ts-ignore
     if (session.user?.role !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -69,7 +67,7 @@ export async function PATCH(
     });
 
     return NextResponse.json(report);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error updating report:", error);
     return NextResponse.json(
       { error: "Error updating report" },

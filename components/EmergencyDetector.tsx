@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from 'react';
 import { useEmergencyDetection, callEmergencyService } from '@/lib/useEmergencyDetection';
 
 interface EmergencyDetectorProps {

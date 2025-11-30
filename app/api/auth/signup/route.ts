@@ -121,7 +121,7 @@ export async function POST(request: Request) {
       try {
         await sendOTPEmail(email, otp);
         console.log(`📧 OTP email sent to user: ${email} with OTP: ${otp}`);
-      } catch (emailError: any) {
+      } catch (emailError: unknown) {
         console.error("❌ Failed to send OTP email:", emailError);
         // Log the error but don't fail the signup process
         // The user can still verify manually or request a new OTP
@@ -138,11 +138,11 @@ export async function POST(request: Request) {
       },
       201
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("❌ Signup error:", error);
 
     // Detect Prisma unique constraint violation
-    if (error.code === "P2002") {
+    if (typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === "P2002") {
       return response({ error: "Email is already registered." }, 409);
     }
 

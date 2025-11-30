@@ -227,8 +227,8 @@ export default function UserSignUp() {
               >
                 <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
                 <div>
-                  <p>We'll send a verification code to your email after signup.</p>
-                  <p className="mt-1">Please check your spam folder if you don't receive it.</p>
+                  <p>We&apos;ll send a verification code to your email after signup.</p>
+                  <p className="mt-1">Please check your spam folder if you don&apos;t receive it.</p>
                 </div>
               </motion.div>
 
@@ -257,7 +257,22 @@ export default function UserSignUp() {
               Sign in
             </Link>
           </div>
-          
+          <p className="text-sm text-neutral-400 mt-2">
+            By signing up, you agree to our{' '}
+            <Link
+              href="/terms"
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="/privacy"
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              Privacy Policy
+            </Link>
+          </p>
           <div className="mt-4 text-center">
             <Link
               href="/auth"

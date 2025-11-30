@@ -11,7 +11,7 @@ export default function UserSignIn() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // This is used
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -38,7 +38,7 @@ export default function UserSignIn() {
         // Redirect regular users to homepage
         router.push("/");
       }
-    } catch (error) {
+    } catch {
       setError("An error occurred during sign in");
     } finally {
       setIsLoading(false);
@@ -157,7 +157,7 @@ export default function UserSignIn() {
           </form>
 
           <div className="mt-6 text-center text-sm text-neutral-400">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/auth/user/signup"
               className="text-blue-500 hover:text-blue-400 font-medium"

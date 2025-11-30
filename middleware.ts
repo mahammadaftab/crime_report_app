@@ -13,7 +13,6 @@ export default withAuth(
     
     // For admin dashboard routes, ensure user is an admin
     if (req.nextUrl.pathname.startsWith('/dashboard')) {
-      // @ts-ignore
       if (token.role !== 'ADMIN') {
         // Redirect regular users to homepage instead of user dashboard
         return NextResponse.redirect(new URL('/', req.url));

@@ -27,9 +27,9 @@ export async function POST(req: Request) {
       { success: true, id: saved.id, message: "Message received." },
       { status: 201 }
     );
-  } catch (err: any) {
-    if (err?.name === "ZodError") {
-      return NextResponse.json({ success: false, errors: err.issues }, { status: 400 });
+  } catch (err: unknown) {
+    if (typeof err === 'object' && err !== null && (err as { name?: string })?.name === "ZodError") {
+      return NextResponse.json({ success: false, errors: (err as { issues?: unknown[] }).issues }, { status: 400 });
     }
     console.error("Contact POST error:", err);
     return NextResponse.json({ success: false, error: "Server error." }, { status: 500 });

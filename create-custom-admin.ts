@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 async function createCustomAdmin() {
   const prisma = new PrismaClient();
@@ -48,11 +48,11 @@ async function createCustomAdmin() {
     console.log('Department:', adminProfile.department);
     console.log('Position:', adminProfile.position);
     
-  } catch (error) {
-    console.error('❌ Error creating admin user:', error.message);
+  } catch (error: unknown) {
+    console.error('❌ Error creating admin user:', (error as Error).message);
     
     // Check if it's a duplicate email error
-    if (error.code === 'P2002') {
+    if (typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002') {
       console.log('⚠️  Admin user might already exist. Try a different email or check your database.');
     }
   } finally {

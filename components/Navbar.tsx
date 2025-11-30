@@ -275,7 +275,6 @@ export default function Navbar() {
                         </div>
                         <div className="py-2">
                           {/* Dashboard link for admin users */}
-                          {/* @ts-ignore */}
                           {session.user?.role === "ADMIN" && (
                             <Link
                               href="/dashboard"

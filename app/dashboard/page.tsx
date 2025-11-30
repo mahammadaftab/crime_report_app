@@ -3,12 +3,12 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Report, ReportStatus, ReportType } from "@prisma/client";
-import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Dashboard() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [reports, setReports] = useState<Report[]>([]);
   const [filter, setFilter] = useState<ReportStatus | "ALL">("ALL");
@@ -223,9 +223,11 @@ export default function Dashboard() {
 
                     {report.image && (
                       <div className="relative">
-                        <img
+                        <Image
                           src={report.image}
                           alt="Report"
+                          width={400}
+                          height={160}
                           className="mt-4 rounded-lg border border-neutral-800 max-h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -285,10 +287,11 @@ export default function Dashboard() {
               className="relative w-full h-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
+              <Image
                 src={zoomedImage}
                 alt="Incident"
-                className="w-full h-full object-contain"
+                fill
+                className="object-contain"
               />
               <button
                 onClick={() => setZoomedImage(null)}

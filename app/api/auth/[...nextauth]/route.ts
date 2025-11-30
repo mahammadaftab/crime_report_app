@@ -1,10 +1,35 @@
-//@ts-nocheck
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
+import { User as PrismaUser, Admin as PrismaAdmin } from "@prisma/client";
+
+// Extend the built-in session and JWT types
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+      role: string;
+    }
+  }
+
+  interface User {
+    role?: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+  }
+}
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -115,7 +140,7 @@ export const authOptions: AuthOptions = {
         }
 
         // Check in User table first
-        let user = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
           where: {
             email: credentials.email,
           },
@@ -127,7 +152,7 @@ export const authOptions: AuthOptions = {
             where: {
               email: credentials.email,
             },
-          });
+          }) as PrismaAdmin | null;
           
           if (!admin) {
             throw new Error("No user found with this email");
@@ -149,8 +174,8 @@ export const authOptions: AuthOptions = {
           
           return {
             id: admin.id.toString(),
-            email: admin.email,
-            name: admin.name,
+            email: admin.email || "",
+            name: admin.name || "",
             role: admin.role,
           };
         }
@@ -171,9 +196,9 @@ export const authOptions: AuthOptions = {
 
         return {
           id: user.id.toString(),
-          email: user.email,
-          name: user.name,
-          role: user.role,
+          email: user.email || "",
+          name: user.name || "",
+          role: (user as PrismaUser).role,
         };
       },
     }),
@@ -183,22 +208,18 @@ export const authOptions: AuthOptions = {
       // Add user information to the token
       if (user) {
         token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
-        token.role = user.role;
+        token.email = user.email || "";
+        token.name = user.name || "";
+        token.role = user.role || "USER";
       }
       return token;
     },
     async session({ session, token }) {
       // Add token information to the session
       if (session?.user) {
-        // @ts-expect-error - Adding custom properties to session user
         session.user.id = token.id;
-        // @ts-expect-error - Adding custom properties to session user
         session.user.email = token.email;
-        // @ts-expect-error - Adding custom properties to session user
         session.user.name = token.name;
-        // @ts-expect-error - Adding custom properties to session user
         session.user.role = token.role;
       }
       return session;

@@ -11,7 +11,7 @@ export default function AdminSignIn() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // This is used
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -50,7 +50,7 @@ export default function AdminSignIn() {
           setError("Access denied. This login is for administrators only.");
         }
       }
-    } catch (error) {
+    } catch {
       setError("An error occurred during sign in");
     } finally {
       setIsLoading(false);

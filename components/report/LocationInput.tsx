@@ -1,15 +1,23 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
+// Define types for Mapbox components
+interface MapboxFeature {
+  place_name?: string;
+  text?: string;
+}
+
+interface MapboxRetrieveEvent {
+  features: MapboxFeature[];
+}
+
 // Dynamically import the Mapbox component with ssr disabled
-const AddressAutofill = dynamic(
-  () => import("@mapbox/search-js-react").then((mod) => mod.AddressAutofill),
-  {
-    ssr: false,
-    loading: () => <div>Loading map...</div>,
-  }
-);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const AddressAutofill = dynamic(() => import("@mapbox/search-js-react").then((mod) => mod.AddressAutofill as any), {
+  ssr: false,
+  loading: () => <div>Loading map...</div>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}) as any;
 
 interface LocationInputProps {
   value: string;
@@ -92,31 +100,14 @@ export function LocationInput({
           <AddressAutofill
             accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ""}
             options={{
-              types: ['address', 'neighborhood', 'locality', 'place', 'district', 'region'],
               language: 'en',
             }}
-            onRetrieve={(e) => {
+            onRetrieve={(e: MapboxRetrieveEvent) => {
               const feature = e.features[0];
               if (feature) {
                 // Create a more detailed location string with area information
                 const placeName = feature.place_name || feature.text || '';
-                const context = feature.context || [];
-                
-                // Extract area-specific information
-                const neighborhood = context.find(c => c.id.includes('neighborhood'));
-                const locality = context.find(c => c.id.includes('locality'));
-                const place = context.find(c => c.id.includes('place'));
-                const region = context.find(c => c.id.includes('region'));
-                
-                // Build a detailed location string
-                let locationString = placeName;
-                
-                // Add more specific area details if available
-                if (neighborhood && !placeName.includes(neighborhood.text)) {
-                  locationString = `${neighborhood.text}, ${locationString}`;
-                }
-                
-                onChange(locationString);
+                onChange(placeName);
               }
             }}
           >
@@ -198,13 +189,10 @@ export function LocationInput({
           )}
         </button>
       </div>
-      <p className="text-xs text-zinc-500 mt-1">
-        Include specific area, street, or landmark for better accuracy
-      </p>
       {locationError && (
-        <p className="text-sm text-red-400 flex items-center gap-2">
+        <p className="text-sm text-red-400 flex items-center">
           <svg
-            className="h-4 w-4"
+            className="w-4 h-4 mr-1.5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -213,8 +201,8 @@ export function LocationInput({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           {locationError}
         </p>

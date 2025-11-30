@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Search, Loader } from "lucide-react";
 
 interface ReportDetails {
@@ -21,7 +20,6 @@ export function ReportTracker() {
   const [reportDetails, setReportDetails] = useState<ReportDetails | null>(
     null
   );
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +40,7 @@ export function ReportTracker() {
       }
       const data = await response.json();
       setReportDetails(data);
-    } catch (err) {
+    } catch {
       setError("Unable to find report. Please check the ID and try again.");
     } finally {
       setLoading(false);

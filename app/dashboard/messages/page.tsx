@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
+import { ContactMessage } from "@prisma/client";
 
 export default async function MessagesPage() {
-  const messages = await prisma.contactMessage.findMany({
+  const messages: ContactMessage[] = await prisma.contactMessage.findMany({
     orderBy: { createdAt: "desc" },
   });
 
@@ -9,7 +10,7 @@ export default async function MessagesPage() {
     <main className="min-h-screen bg-black text-white p-8">
       <h1 className="text-2xl font-semibold mb-6">Contact Messages</h1>
       <div className="space-y-4">
-  {messages.map((m: any) => (
+  {messages.map((m) => (
           <div
             key={m.id}
             className="border border-neutral-800 rounded-xl p-4 bg-neutral-900/50"

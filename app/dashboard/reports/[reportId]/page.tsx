@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Report, ReportStatus } from "@prisma/client";
+import Image from "next/image";
 
 export default function ReportDetails({ params }: { params: { reportId: string } }) {
   const router = useRouter();
@@ -226,9 +227,11 @@ export default function ReportDetails({ params }: { params: { reportId: string }
                 <div>
                   <h3 className="font-semibold text-white mb-3">Incident Image</h3>
                   <div className="bg-neutral-800/50 p-4 rounded-lg">
-                    <img
+                    <Image
                       src={report.image}
                       alt="Incident"
+                      width={600}
+                      height={400}
                       className="w-full rounded-lg border border-neutral-700 cursor-pointer hover:opacity-90 transition-opacity"
                       onClick={() => setIsImageZoomed(true)}
                     />
@@ -258,10 +261,11 @@ export default function ReportDetails({ params }: { params: { reportId: string }
               className="relative w-full h-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
+              <Image
                 src={report.image || ""}
                 alt="Incident"
-                className="w-full h-full object-contain"
+                fill
+                className="object-contain"
               />
               <button
                 onClick={() => setIsImageZoomed(false)}

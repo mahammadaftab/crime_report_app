@@ -92,7 +92,7 @@ export async function POST(request: Request) {
         await sendOTPEmail(email, otp);
         console.log(`📧 Resent OTP email to user: ${email} with OTP: ${otp}`);
         emailSent = true;
-      } catch (emailError: any) {
+      } catch (emailError: unknown) {
         console.error("❌ Failed to send OTP email:", emailError);
         // Don't fail the request if email sending fails, but log it
       }
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
       },
       200
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("❌ Resend OTP error:", error);
     return response({ error: "Internal server error. Please try again later." }, 500);
   }

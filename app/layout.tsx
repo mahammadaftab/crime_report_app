@@ -9,6 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://safereport.app'),
   title: "SafeReport - Anonymous Crime Reporting",
   description: "Securely and anonymously report crimes to law enforcement",
   keywords: [

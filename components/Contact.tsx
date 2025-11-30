@@ -34,8 +34,9 @@ export default function Contact() {
   
        setSuccess("✅ Message sent successfully! We’ll get back to you soon.");
     setFormData({ name: "", email: "", message: "" });
-  } catch (err: any) {
-    setSuccess(`❌ ${err.message || "Something went wrong."}`);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Something went wrong.";
+    setSuccess(`❌ ${errorMessage}`);
   } finally {
     setLoading(false);
     }

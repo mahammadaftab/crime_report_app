@@ -12,10 +12,10 @@ const steps = [
 
 export function ReportWizard() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [reportData, setReportData] = useState<any>(null);
+  const [reportData, setReportData] = useState<unknown>(null);
 
-  const handleStepComplete = async (data: any) => {
-    setReportData({ ...reportData, ...data });
+  const handleStepComplete = async (data: unknown) => {
+    setReportData({ ...(reportData as object), ...(data as object) });
     if (currentStep < steps.length) {
       setCurrentStep((prev) => prev + 1);
     }

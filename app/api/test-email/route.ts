@@ -23,12 +23,13 @@ export async function POST(request: Request) {
       success: true,
       message: `Test email sent successfully to ${email} with OTP: ${testOTP}`
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Email test error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
       { 
         success: false, 
-        error: `Failed to send email: ${error.message || "Unknown error"}` 
+        error: `Failed to send email: ${errorMessage}` 
       },
       { status: 500 }
     );

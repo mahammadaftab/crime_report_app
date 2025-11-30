@@ -95,7 +95,7 @@ export async function POST(request: Request) {
       },
       200
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("❌ Verification error:", error);
     return response({ error: "Internal server error. Please try again later." }, 500);
   }
