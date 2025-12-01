@@ -90,9 +90,64 @@ export default function RewardsDashboard() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-neutral-900 to-black py-12 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center">
-            <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-neutral-400">Loading rewards dashboard...</p>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <div className="h-8 bg-neutral-800 rounded w-64 mb-2"></div>
+              <div className="h-4 bg-neutral-800 rounded w-48"></div>
+            </div>
+            <div className="h-10 bg-neutral-800 rounded w-24"></div>
+          </div>
+
+          {/* Stats Overview Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-neutral-900/60 border border-white/10 rounded-2xl p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="h-4 bg-neutral-800 rounded w-24 mb-3"></div>
+                    <div className="h-8 bg-neutral-800 rounded w-16"></div>
+                  </div>
+                  <div className="h-8 bg-neutral-800 rounded w-8"></div>
+                </div>
+                <div className="h-3 bg-neutral-800 rounded w-32 mt-4"></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tier Progress Skeleton */}
+          <div className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="h-6 bg-neutral-800 rounded w-40"></div>
+              <div className="h-4 bg-neutral-800 rounded w-48"></div>
+            </div>
+            
+            <div className="mb-6">
+              <div className="flex justify-between mb-2">
+                <div className="h-4 bg-neutral-800 rounded w-24"></div>
+                <div className="h-4 bg-neutral-800 rounded w-24"></div>
+              </div>
+              <div className="w-full bg-neutral-800 rounded-full h-3">
+                <div className="h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full w-1/3"></div>
+              </div>
+              <div className="flex justify-between mt-2">
+                <div className="h-3 bg-neutral-800 rounded w-16"></div>
+                <div className="h-3 bg-neutral-800 rounded w-20"></div>
+              </div>
+            </div>
+
+            {/* Tier Benefits Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1, 2].map((i) => (
+                <div key={i} className="bg-neutral-800/50 border border-neutral-700 rounded-xl p-4">
+                  <div className="h-5 bg-neutral-800 rounded w-32 mb-3"></div>
+                  <div className="space-y-2">
+                    {[1, 2, 3].map((j) => (
+                      <div key={j} className="h-4 bg-neutral-800 rounded w-full"></div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

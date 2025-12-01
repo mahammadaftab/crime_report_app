@@ -62,9 +62,59 @@ export default function RewardsHistory() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-neutral-900 to-black py-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center">
-            <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-neutral-400">Loading rewards history...</p>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <div className="h-8 bg-neutral-800 rounded w-48 mb-2"></div>
+              <div className="h-4 bg-neutral-800 rounded w-64"></div>
+            </div>
+            <div className="h-10 bg-neutral-800 rounded w-24"></div>
+          </div>
+
+          {/* Summary Cards Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-neutral-900/60 border border-white/10 rounded-2xl p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="h-4 bg-neutral-800 rounded w-24 mb-2"></div>
+                    <div className="h-6 bg-neutral-800 rounded w-16"></div>
+                  </div>
+                  <div className="h-8 bg-neutral-800 rounded w-8"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Filters Skeleton */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-10 bg-neutral-800 rounded-lg w-32"></div>
+            ))}
+          </div>
+
+          {/* History List Skeleton */}
+          <div className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="p-6 border-b border-white/10">
+              <div className="h-6 bg-neutral-800 rounded w-48 mb-2"></div>
+              <div className="h-4 bg-neutral-800 rounded w-32"></div>
+            </div>
+
+            <div className="divide-y divide-white/10">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="h-5 bg-neutral-800 rounded w-40 mb-2"></div>
+                      <div className="h-4 bg-neutral-800 rounded w-32"></div>
+                    </div>
+                    <div className="text-right">
+                      <div className="h-6 bg-neutral-800 rounded w-16 mb-1"></div>
+                      <div className="h-4 bg-neutral-800 rounded w-20"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

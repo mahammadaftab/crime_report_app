@@ -21,8 +21,13 @@ function response(
 
 export async function GET() {
   try {
-    // Get top reporters
-    const topReporters = await prisma.userReward.findMany({
+    // Add a timeout to prevent hanging
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database connection timeout')), 5000)
+    );
+    
+    // Try to fetch leaderboard with timeout
+    const fetchPromise = prisma.userReward.findMany({
       where: {
         points: {
           gt: 0,
@@ -41,6 +46,8 @@ export async function GET() {
       },
       take: 50, // Top 50 reporters
     });
+    
+    const topReporters = await Promise.race([fetchPromise, timeoutPromise]) as Awaited<typeof fetchPromise>;
 
     const leaderboard: TopReporter[] = topReporters.map((reward) => ({
       userId: reward.userId,
@@ -55,6 +62,12 @@ export async function GET() {
     });
   } catch (error: unknown) {
     console.error("Leaderboard API error:", error);
+    
+    // Check if it's a database connection error
+    if (error instanceof Error && (error.message.includes('Can\'t reach database server') || error.message.includes('timeout'))) {
+      return response({ error: "Service temporarily unavailable. Please try again later." }, 503);
+    }
+    
     return response({ error: "Internal server error" }, 500);
   }
 }

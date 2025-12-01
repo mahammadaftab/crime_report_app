@@ -1,25 +1,33 @@
+"use client";
+
 import Link from "next/link";
-import prisma from "@/lib/prisma";
+import { useEffect, useState } from "react";
 
-async function getReportCount() {
-  try {
-    const count = await prisma.report.count();
-    return count;
-  } catch (error) {
-    console.error("Error fetching report count:", error);
-    // Return a default value when database is not accessible
-    return 0;
-  }
-}
+export default function Home() {
+  const [reportCount, setReportCount] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export default async function Home() {
-  let reportCount;
-  try {
-    reportCount = await getReportCount();
-  } catch (error) {
-    console.error("Error fetching report count:", error);
-    reportCount = 0;
-  }
+  useEffect(() => {
+    // Fetch report count on client side
+    const fetchReportCount = async () => {
+      try {
+        const response = await fetch("/api/reports/count");
+        if (response.ok) {
+          const data = await response.json();
+          setReportCount(data.count);
+        } else {
+          setReportCount(0);
+        }
+      } catch (error) {
+        console.error("Error fetching report count:", error);
+        setReportCount(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReportCount();
+  }, []);
 
   return (
     <main className="relative px-4 pt-20 pb-12 sm:px-6 sm:pt-24 md:pt-32 md:pb-16">
@@ -170,7 +178,10 @@ export default async function Home() {
         <div className="mt-12 rounded-xl bg-gradient-to-br from-zinc-900 to-zinc-800 p-5 sm:p-6 md:p-8 md:mt-16 shadow-lg ring-1 ring-white/10">
           <div className="grid gap-y-5 sm:grid-cols-3">
             {[
-              { value: reportCount?.toLocaleString() || "0", label: "Reports Filed" },
+              { 
+                value: loading ? "..." : (reportCount !== null ? reportCount.toLocaleString() : "0"), 
+                label: "Reports Filed" 
+              },
               { value: "100%", label: "Anonymity Rate" },
               { value: "24/7", label: "Support Available" },
             ].map((stat, i) => (

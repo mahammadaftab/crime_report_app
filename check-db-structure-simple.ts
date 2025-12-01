@@ -38,7 +38,8 @@ async function checkDbStructure() {
         console.log(`  ${row.column_name} (${row.data_type})`);
       });
     } catch (_error) { // Prefix with underscore to indicate intentionally unused
-      console.log('Error checking Report table structure:', _error);
+      const errorMessage = _error instanceof Error ? _error.message : 'Unknown error';
+      console.log('Error checking Report table structure:', errorMessage);
     }
     
   } catch (error) {

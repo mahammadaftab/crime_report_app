@@ -159,7 +159,7 @@ export default function Dashboard() {
   ];
 
   // Show loading state
-  if (status === "loading" || isLoading) {
+  if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
         <motion.div
@@ -174,6 +174,64 @@ export default function Dashboard() {
   // Show nothing if not authenticated
   if (status !== "authenticated") {
     return null;
+  }
+
+  // Show simplified loading state while fetching reports
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        {/* Navbar */}
+        <nav className="border-b border-white/10 bg-black/50 backdrop-blur-lg sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent">
+              Admin Dashboard
+            </h1>
+          </div>
+        </nav>
+
+        {/* Main */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+          {/* Stats */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+            {[1, 2, 3].map((i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-neutral-900/50 border border-white/10 rounded-xl p-4"
+              >
+                <div className="h-4 bg-neutral-800 rounded w-1/2 mb-3"></div>
+                <div className="h-6 bg-neutral-800 rounded w-3/4"></div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-3">
+            <div className="h-10 bg-neutral-800 rounded-lg w-24"></div>
+            <div className="h-10 bg-neutral-800 rounded-lg w-24"></div>
+          </div>
+
+          {/* Reports List Skeleton */}
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div 
+                key={i} 
+                className="bg-neutral-900/50 border border-white/10 rounded-xl p-4"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="h-5 bg-neutral-800 rounded w-1/3"></div>
+                  <div className="h-6 bg-neutral-800 rounded w-20"></div>
+                </div>
+                <div className="h-4 bg-neutral-800 rounded w-full mb-2"></div>
+                <div className="h-4 bg-neutral-800 rounded w-2/3"></div>
+              </div>
+            ))}
+          </div>
+        </main>
+      </div>
+    );
   }
 
   return (

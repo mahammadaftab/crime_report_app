@@ -24,8 +24,13 @@ export async function GET(req: Request) {
       ...(type && { type }),
     };
 
+    // Add timeout protection
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database connection timeout')), 5000)
+    );
+    
     // Add pagination and optimize query with shorter timeout
-    const [reports, total] = await Promise.all([
+    const fetchPromise = Promise.all([
       prisma.report.findMany({
         where,
         orderBy: {
@@ -51,6 +56,8 @@ export async function GET(req: Request) {
       }),
       prisma.report.count({ where })
     ]);
+    
+    const [reports, total] = await Promise.race([fetchPromise, timeoutPromise]) as Awaited<typeof fetchPromise>;
 
     return NextResponse.json({
       reports,
@@ -84,7 +91,7 @@ export async function GET(req: Request) {
     }
 
     // Handle timeout errors specifically
-    if (error instanceof Error && error.message.includes("timeout")) {
+    if (error instanceof Error && (error.message.includes("timeout") || error.message.includes("Can't reach database server"))) {
       return NextResponse.json(
         { error: "Request timeout. Database is taking too long to respond. Please try again." },
         { status: 504 }

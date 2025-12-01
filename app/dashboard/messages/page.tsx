@@ -6,12 +6,27 @@ export default async function MessagesPage() {
   let error: string | null = null;
 
   try {
-    messages = await prisma.contactMessage.findMany({
+    // Add a timeout to prevent hanging
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database connection timeout')), 5000)
+    );
+    
+    // Try to fetch messages with timeout
+    const fetchPromise = prisma.contactMessage.findMany({
       orderBy: { createdAt: "desc" },
     });
+    
+    messages = await Promise.race([fetchPromise, timeoutPromise]) as ContactMessage[];
   } catch (err) {
     console.error("Failed to fetch messages:", err);
-    error = "Failed to load messages. Please try again later.";
+    // Check if it's a database connection error
+    if (err instanceof Error && (err.message.includes('Can\'t reach database server') || err.message.includes('timeout'))) {
+      error = "Database connection unavailable. Please try again later.";
+    } else {
+      error = "Failed to load messages. Please try again later.";
+    }
+    // Return empty array to prevent crashing
+    messages = [];
   }
 
   return (
@@ -20,23 +35,30 @@ export default async function MessagesPage() {
       {error ? (
         <div className="border border-red-500/30 rounded-xl p-4 bg-red-900/10">
           <p className="text-red-300">{error}</p>
+          <p className="text-red-400 text-sm mt-2">The application is running but cannot connect to the database at the moment.</p>
         </div>
       ) : (
         <div className="space-y-4">
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className="border border-neutral-800 rounded-xl p-4 bg-neutral-900/50"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <p className="font-medium">{m.name} • {m.email}</p>
-                <span className="text-xs text-neutral-400">
-                  {new Date(m.createdAt).toLocaleString()}
-                </span>
+          {messages.length > 0 ? (
+            messages.map((m) => (
+              <div
+                key={m.id}
+                className="border border-neutral-800 rounded-xl p-4 bg-neutral-900/50"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <p className="font-medium">{m.name} • {m.email}</p>
+                  <span className="text-xs text-neutral-400">
+                    {new Date(m.createdAt).toLocaleString()}
+                  </span>
+                </div>
+                <p className="text-neutral-300 whitespace-pre-wrap">{m.message}</p>
               </div>
-              <p className="text-neutral-300 whitespace-pre-wrap">{m.message}</p>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-neutral-500">No messages found</p>
             </div>
-          ))}
+          )}
         </div>
       )}
     </main>

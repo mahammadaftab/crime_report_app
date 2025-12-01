@@ -304,10 +304,58 @@ export default function ProfilePage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-neutral-900 to-black">
-        <div className="text-center">
-          <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-neutral-400">Loading profile...</p>
+      <div className="min-h-screen bg-gradient-to-br from-black via-neutral-900 to-black py-12 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div className="h-8 bg-neutral-800 rounded w-32"></div>
+            <div className="h-10 bg-neutral-800 rounded w-24"></div>
+          </div>
+
+          {/* Profile Card Skeleton */}
+          <div className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden mb-8">
+            <div className="p-6 border-b border-white/10">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 rounded-full bg-neutral-800 animate-pulse"></div>
+                <div>
+                  <div className="h-6 bg-neutral-800 rounded w-32 mb-2"></div>
+                  <div className="h-4 bg-neutral-800 rounded w-48 mb-2"></div>
+                  <div className="h-5 bg-neutral-800 rounded w-16"></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i}>
+                    <div className="h-4 bg-neutral-800 rounded w-24 mb-2"></div>
+                    <div className="h-12 bg-neutral-800 rounded-lg"></div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-white/10">
+                <div className="h-10 bg-neutral-800 rounded w-32"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Rewards Section Skeleton */}
+          <div className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="p-6 border-b border-white/10">
+              <div className="h-6 bg-neutral-800 rounded w-40"></div>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-neutral-800/50 rounded-xl p-4">
+                    <div className="h-4 bg-neutral-800 rounded w-24 mb-2"></div>
+                    <div className="h-8 bg-neutral-800 rounded w-16"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

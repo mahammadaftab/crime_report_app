@@ -67,9 +67,52 @@ export default function LeaderboardPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-neutral-900 to-black py-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center">
-            <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-neutral-400">Loading leaderboard...</p>
+          <div className="text-center mb-12">
+            <div className="h-8 bg-neutral-800 rounded w-64 mx-auto mb-4"></div>
+            <div className="h-4 bg-neutral-800 rounded w-96 mx-auto"></div>
+          </div>
+
+          <div className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="p-6 border-b border-white/10">
+              <div className="h-6 bg-neutral-800 rounded w-40"></div>
+            </div>
+
+            <div className="divide-y divide-white/10">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-12 flex items-center justify-center">
+                        <div className="h-6 bg-neutral-800 rounded w-6"></div>
+                      </div>
+                      <div className="ml-4">
+                        <div className="h-5 bg-neutral-800 rounded w-32 mb-2"></div>
+                        <div className="flex items-center space-x-4">
+                          <div className="h-4 bg-neutral-800 rounded w-24"></div>
+                          <div className="h-4 bg-neutral-800 rounded w-20"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="h-6 bg-neutral-800 rounded w-16 mb-1"></div>
+                      <div className="h-4 bg-neutral-800 rounded w-12"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-6 border-t border-white/10 bg-neutral-900/30">
+              <div className="h-5 bg-neutral-800 rounded w-32 mb-2"></div>
+              <div className="grid grid-cols-3 gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-neutral-800/20 border border-neutral-700/30 rounded-lg p-3">
+                    <div className="h-6 bg-neutral-800 rounded w-8 mx-auto mb-1"></div>
+                    <div className="h-3 bg-neutral-800 rounded w-16 mx-auto"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

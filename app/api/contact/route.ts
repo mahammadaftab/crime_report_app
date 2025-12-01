@@ -19,9 +19,17 @@ export async function POST(req: Request) {
       req.headers.get("x-real-ip") ??
       null;
 
-    const saved = await prisma.contactMessage.create({
+    // Add a timeout to prevent hanging
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database connection timeout')), 5000)
+    );
+    
+    // Try to save the contact message with timeout
+    const savePromise = prisma.contactMessage.create({
       data: { ...data, ip },
     });
+    
+    const saved = await Promise.race([savePromise, timeoutPromise]) as Awaited<typeof savePromise>;
 
     return NextResponse.json(
       { success: true, id: saved.id, message: "Message received." },
@@ -31,6 +39,16 @@ export async function POST(req: Request) {
     if (typeof err === 'object' && err !== null && (err as { name?: string })?.name === "ZodError") {
       return NextResponse.json({ success: false, errors: (err as { issues?: unknown[] }).issues }, { status: 400 });
     }
+    
+    // Check if it's a database connection error
+    if (err instanceof Error && (err.message.includes('Can\'t reach database server') || err.message.includes('timeout'))) {
+      console.error("Database connection error:", err.message);
+      return NextResponse.json(
+        { success: false, error: "Service temporarily unavailable. Please try again later." }, 
+        { status: 503 }
+      );
+    }
+    
     console.error("Contact POST error:", err);
     return NextResponse.json({ success: false, error: "Server error." }, { status: 500 });
   }
