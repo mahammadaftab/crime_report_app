@@ -10,8 +10,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://safereport.app'),
-  title: "SafeReport - Anonymous Crime Reporting",
-  description: "Securely and anonymously report crimes to law enforcement",
+  title: "Accident and Crime Report App",
+  description: "Securely and Incidentally report crimes to law enforcement and get help",
   keywords: [
     "crime report",
     "anonymous reporting",
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
     "law enforcement",
   ],
   openGraph: {
-    title: "SafeReport - Anonymous Crime Reporting",
-    description: "Securely and anonymously report crimes to law enforcement",
+    title: "Accident and Crime Report App",
+    description: "Securely and Incidentally report crimes to law enforcement and get help",
     url: "https://safereport.app",
     siteName: "SafeReport",
     images: [
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SafeReport - Anonymous Crime Reporting",
-    description: "Report crimes securely and anonymously.",
+    title: "Accident and Crime Report App",
+    description: "Report crimes securely and Incidentally to law enforcement and get help",
     images: ["/og-image.png"],
   },
 };

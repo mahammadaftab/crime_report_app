@@ -42,11 +42,11 @@ export default function SubmitReport() {
                   d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
-              Secure & Anonymous
+              Accident and Crime Reporting
             </div>
 
             <h1 className="mt-4 bg-gradient-to-b from-white to-white/80 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl md:text-4xl lg:text-5xl">
-              Submit Anonymous Report
+              Submit Incident Report
             </h1>
 
             <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-400 sm:mt-4 sm:max-w-2xl sm:text-base md:text-lg">

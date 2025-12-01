@@ -6,6 +6,8 @@ import { Report, ReportStatus, ReportType } from "@prisma/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Dashboard() {
   const { status } = useSession();
@@ -15,6 +17,7 @@ export default function Dashboard() {
   const [typeFilter, setTypeFilter] = useState<ReportType | "ALL">("ALL");
   const [isLoading, setIsLoading] = useState(true);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+
 
   // Redirect unauthenticated users to sign in
   useEffect(() => {
@@ -35,9 +38,22 @@ export default function Dashboard() {
     try {
       const response = await fetch("/api/reports");
       const data = await response.json();
-      setReports(data);
+      
+      if (response.ok) {
+        // Handle new response format
+        if (data.reports) {
+          setReports(data.reports);
+        } else {
+          // Handle old format (backward compatibility)
+          setReports(Array.isArray(data) ? data : []);
+        }
+      } else {
+        console.error("Error fetching reports:", data.error);
+        setReports([]);
+      }
     } catch (error) {
       console.error("Error fetching reports:", error);
+      setReports([]);
     } finally {
       setIsLoading(false);
     }
@@ -48,15 +64,60 @@ export default function Dashboard() {
     newStatus: ReportStatus
   ) => {
     try {
+      // Optimistically update the UI
+      setReports(prevReports => 
+        prevReports.map(report => 
+          report.id === reportId ? { ...report, status: newStatus } : report
+        )
+      );
+
       const response = await fetch(`/api/reports/${reportId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
 
-      if (response.ok) fetchReports();
+      if (!response.ok) {
+        // If the update failed, revert the optimistic update
+        fetchReports();
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to update report status");
+      } else {
+        // Show success message based on status
+        if (newStatus === "RESOLVED") {
+          toast.success("Report resolved! Reward points awarded to user.", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        } else if (newStatus === "DISMISSED" || newStatus === "REJECTED") {
+          toast.info(`Report ${newStatus.toLowerCase()}. No reward points awarded.`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        } else {
+          toast.info(`Report status updated to ${newStatus}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      }
     } catch (error) {
       console.error("Error updating report:", error);
+      // If there was an error, revert to the previous state
+      fetchReports();
+      toast.error("Error updating report status");
     }
   };
 
@@ -74,8 +135,9 @@ export default function Dashboard() {
       IN_PROGRESS: "bg-sky-500/10 text-sky-400 border border-sky-500/30",
       RESOLVED: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30",
       DISMISSED: "bg-neutral-500/10 text-neutral-400 border border-neutral-500/30",
+      REJECTED: "bg-red-500/10 text-red-400 border border-red-500/30",
     };
-    return colors[status];
+    return colors[status] || "bg-neutral-500/10 text-neutral-400 border border-neutral-500/30";
   };
 
   // Simple stats
@@ -116,6 +178,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-black text-white">
+      <ToastContainer />
       {/* Navbar */}
       <nav className="border-b border-white/10 bg-black/50 backdrop-blur-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">

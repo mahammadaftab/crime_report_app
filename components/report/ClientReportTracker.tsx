@@ -83,7 +83,7 @@ export function ClientReportTracker() {
       setError("Failed to read clipboard contents");
     }
   };
-
+  
   return (
     <div className="w-full">
       {/* Header Section */}

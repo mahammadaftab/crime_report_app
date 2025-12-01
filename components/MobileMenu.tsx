@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useRef, useState, useEffect } from "react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -96,21 +96,93 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             </button>
           </div>
 
-          {/* Profile section for mobile */}
+          {/* Profile section for mobile when logged in */}
           {session && (
-            <div className="flex items-center space-x-2 pb-2 border-b border-zinc-800">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white text-xs font-medium">
-                {session.user?.name?.charAt(0).toUpperCase() || "U"}
+            <div className="border-t border-zinc-800 pt-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white font-medium">
+                    {session.user?.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      {session.user?.name || "User"}
+                    </p>
+                    <p className="text-xs text-zinc-400">
+                      {session.user?.email}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <button
-                onClick={() => {
-                  signOut();
-                  onClose();
-                }}
-                className="text-xs text-zinc-400 hover:text-sky-400 transition-colors"
-              >
-                Sign Out
-              </button>
+              
+              <nav className="flex flex-col space-y-2">
+                <Link
+                  href="/profile"
+                  className="flex items-center px-3 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 rounded-lg transition-colors"
+                  onClick={onClose}
+                >
+                  <svg
+                    className="w-5 h-5 mr-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                  Profile
+                </Link>
+                
+                {session.user?.role === "ADMIN" && (
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center px-3 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 rounded-lg transition-colors"
+                    onClick={onClose}
+                  >
+                    <svg
+                      className="w-5 h-5 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                      />
+                    </svg>
+                    Dashboard
+                  </Link>
+                )}
+                
+                <button
+                  onClick={() => {
+                    signOut();
+                    onClose();
+                  }}
+                  className="flex items-center px-3 py-2 text-sm text-zinc-300 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors w-full text-left"
+                >
+                  <svg
+                    className="w-5 h-5 mr-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  Sign Out
+                </button>
+              </nav>
             </div>
           )}
 

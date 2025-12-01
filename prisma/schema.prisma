@@ -12,6 +12,7 @@ enum ReportStatus {
   IN_PROGRESS
   RESOLVED
   DISMISSED
+  REJECTED
 }
 
 enum ReportType {
@@ -33,6 +34,14 @@ model Report {
   status         ReportStatus @default(PENDING)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  
+  // Relation to user who submitted the report
+  userId         Int?
+  user           User?        @relation(fields: [userId], references: [id])
+  
+  // Reward history relation
+  rewardHistories  RewardHistory[]
+
   @@index([reportId])
 }
 
@@ -50,6 +59,8 @@ model User {
 
   // Relation to user-specific data
   userProfile    UserProfile?
+  userRewards    UserReward[]
+  reports        Report[]
 }
 
 model UserProfile {
@@ -62,6 +73,34 @@ model UserProfile {
   updatedAt      DateTime @updatedAt
 
   user           User     @relation(fields: [userId], references: [id])
+}
+
+// Reward system models
+model UserReward {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  points         Int      @default(0)
+  totalReports   Int      @default(0)
+  totalEarnings  Float    @default(0.0)
+  lastUpdated    DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User     @relation(fields: [userId], references: [id])
+  rewardHistory  RewardHistory[]
+}
+
+model RewardHistory {
+  id             Int      @id @default(autoincrement())
+  userRewardId   Int
+  pointsEarned   Int
+  amountEarned   Float    @default(0.0)
+  reportId       String?
+  description    String
+  createdAt      DateTime @default(now())
+
+  userReward     UserReward @relation(fields: [userRewardId], references: [id])
+  report         Report?    @relation(fields: [reportId], references: [reportId])
 }
 
 model Admin {

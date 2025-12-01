@@ -15,6 +15,8 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status") as ReportStatus | null;
     const type = searchParams.get("type") as ReportType | null;
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "50"), 100); // Cap at 100
 
     // Build the where clause based on filters
     const where = {
@@ -22,13 +24,15 @@ export async function GET(req: Request) {
       ...(type && { type }),
     };
 
-    // Add timeout and retry logic
-    const reports = await Promise.race([
+    // Add pagination and optimize query with shorter timeout
+    const [reports, total] = await Promise.all([
       prisma.report.findMany({
         where,
         orderBy: {
           createdAt: "desc",
         },
+        skip: (page - 1) * limit,
+        take: limit,
         select: {
           id: true,
           reportId: true,
@@ -45,32 +49,50 @@ export async function GET(req: Request) {
           updatedAt: true,
         },
       }),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Database timeout")), 15000)
-      ),
+      prisma.report.count({ where })
     ]);
 
-    return NextResponse.json(reports);
+    return NextResponse.json({
+      reports,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    });
   } catch (error: unknown) {
     console.error("Failed to fetch reports:", error);
 
     // More specific error messages
-    if (typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === "P1001") {
-      return NextResponse.json(
-        { error: "Cannot connect to database. Please try again later." },
-        { status: 503 }
-      );
+    if (typeof error === 'object' && error !== null && 'code' in error) {
+      const errorCode = (error as { code?: string }).code;
+      
+      if (errorCode === "P1001") {
+        return NextResponse.json(
+          { error: "Cannot connect to database. Please try again later." },
+          { status: 503 }
+        );
+      }
+
+      if (errorCode === "P2024") {
+        return NextResponse.json(
+          { error: "Database connection timeout. Please try again." },
+          { status: 504 }
+        );
+      }
     }
 
-    if (typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === "P2024") {
+    // Handle timeout errors specifically
+    if (error instanceof Error && error.message.includes("timeout")) {
       return NextResponse.json(
-        { error: "Database connection timeout. Please try again." },
+        { error: "Request timeout. Database is taking too long to respond. Please try again." },
         { status: 504 }
       );
     }
 
     return NextResponse.json(
-      { error: "Failed to fetch reports" },
+      { error: "Failed to fetch reports. Please try again later." },
       { status: 500 }
     );
   }

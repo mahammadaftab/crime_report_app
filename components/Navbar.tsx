@@ -21,6 +21,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/submit-report", label: "Submit Report" },
     { href: "/track-report", label: "Track Report" },
+    // Removed Leaderboard and Rewards from navbar
     { href: "/how-it-works", label: "How It Works" },
     { href: "/resources", label: "Resources" },
     { href: "/contact", label: "Support" },
@@ -256,67 +257,53 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-0 mt-2 w-64 bg-zinc-900 border border-zinc-800 rounded-xl shadow-xl z-50 overflow-hidden"
+                        className="absolute right-0 mt-2 w-48 bg-zinc-900 border border-zinc-800 rounded-xl shadow-xl z-50 overflow-hidden"
                       >
-                        <div className="p-4 border-b border-zinc-800">
-                          <div className="flex items-center space-x-3">
-                            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white font-medium">
-                              {session.user?.name?.charAt(0).toUpperCase() || "U"}
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-white">
-                                {session.user?.name || "User"}
-                              </p>
-                              <p className="text-xs text-zinc-400 truncate">
-                                {session.user?.email}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
                         <div className="py-2">
-                          {/* Dashboard link for admin users */}
-                          {session.user?.role === "ADMIN" && (
-                            <Link
-                              href="/dashboard"
-                              className="flex items-center w-full px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
-                              onClick={() => setIsProfileDropdownOpen(false)}
-                            >
-                              <svg
-                                className="w-4 h-4 mr-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                          <Link
+                            href="/profile"
+                            className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                          >
+                            Profile
+                          </Link>
+                          {/* For admin users, only show Dashboard, Profile, and Sign Out */}
+                          {session.user?.role === "ADMIN" ? (
+                            <>
+                              <Link
+                                href="/dashboard"
+                                className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
+                                onClick={() => setIsProfileDropdownOpen(false)}
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                                />
-                              </svg>
-                              Dashboard
-                            </Link>
+                                Dashboard
+                              </Link>
+                            </>
+                          ) : (
+                            /* For regular users, show Leaderboard and Rewards */
+                            <>
+                              <Link
+                                href="/leaderboard"
+                                className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
+                                onClick={() => setIsProfileDropdownOpen(false)}
+                              >
+                                Leaderboard
+                              </Link>
+                              <Link
+                                href="/rewards"
+                                className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
+                                onClick={() => setIsProfileDropdownOpen(false)}
+                              >
+                                Rewards
+                              </Link>
+                            </>
                           )}
                           <button
                             onClick={() => {
                               signOut();
                               setIsProfileDropdownOpen(false);
                             }}
-                            className="flex items-center w-full px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
+                            className="block w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-red-500/10 hover:text-red-400 transition-colors"
                           >
-                            <svg
-                              className="w-4 h-4 mr-3"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                              />
-                            </svg>
                             Sign Out
                           </button>
                         </div>

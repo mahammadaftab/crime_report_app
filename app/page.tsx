@@ -40,7 +40,7 @@ export default async function Home() {
                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
               />
             </svg>
-            Secure & Anonymous Reporting
+            Accident And Crime Report App
           </div>
 
           <h1 className="mt-6 bg-gradient-to-r from-white via-sky-200 to-white bg-clip-text text-3xl font-extrabold tracking-tight text-transparent sm:text-4xl md:text-5xl lg:text-6xl leading-tight">
@@ -59,7 +59,7 @@ export default async function Home() {
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <Link href={"/submit-report"}>
               <button className="group relative flex h-10 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-sky-500 to-blue-600 px-5 text-sm font-medium text-white shadow-lg shadow-sky-500/30 transition-all hover:scale-105 hover:shadow-sky-500/50 sm:h-11 sm:px-6">
-                Make Anonymous Report
+                Make Incident Report
                 <svg
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
                   fill="none"

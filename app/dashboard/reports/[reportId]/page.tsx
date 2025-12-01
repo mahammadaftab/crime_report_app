@@ -42,6 +42,7 @@ export default function ReportDetails({ params }: { params: { reportId: string }
       IN_PROGRESS: "bg-sky-500/10 text-sky-400 border border-sky-500/30",
       RESOLVED: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30",
       DISMISSED: "bg-neutral-500/10 text-neutral-400 border border-neutral-500/30",
+      REJECTED: "bg-red-500/10 text-red-400 border border-red-500/30", // Added missing REJECTED status
     };
     return colors[status];
   };
