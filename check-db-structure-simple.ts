@@ -15,7 +15,7 @@ async function checkDbStructure() {
         // Use Prisma's raw query to check if table exists
         const result = await prisma.$queryRawUnsafe<{count: number}[]>(`SELECT COUNT(*) as count FROM "${table}"`);
         console.log(`✅ Table ${table} exists with ${result[0].count} records`);
-      } catch (_error) { // Prefix with underscore to indicate intentionally unused
+      } catch { // Remove unused error parameter
         console.log(`❌ Table ${table} does not exist or is inaccessible`);
       }
     }
