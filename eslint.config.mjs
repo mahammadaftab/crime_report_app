@@ -18,6 +18,11 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "*.cjs",
+      "check-db-structure-direct.cjs",
+      "direct-db-connection.cjs",
+      "simple-test.cjs",
+      "test-prisma-connection.cjs",
     ],
   },
 ];
