@@ -49,11 +49,19 @@ export default function Dashboard() {
         }
       } else {
         console.error("Error fetching reports:", data.error);
-        setReports([]);
+        // Even if there's an error, try to use any data that was returned
+        if (data.reports) {
+          setReports(data.reports);
+        } else {
+          setReports([]);
+        }
+        // Show error message to user
+        toast.error(data.error || "Failed to load reports. Displaying cached data if available.");
       }
     } catch (error) {
       console.error("Error fetching reports:", error);
       setReports([]);
+      toast.error("Network error. Please check your connection and try again.");
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +75,7 @@ export default function Dashboard() {
       // Optimistically update the UI
       setReports(prevReports => 
         prevReports.map(report => 
-          report.id === reportId ? { ...report, status: newStatus } : report
+          report.reportId === reportId ? { ...report, status: newStatus } : report
         )
       );
 
@@ -354,6 +362,8 @@ export default function Dashboard() {
                             e.stopPropagation();
                             setZoomedImage(report.image || "");
                           }}
+                          loading="lazy"
+                          quality={75}
                         />
                         <p className="text-xs text-neutral-500 mt-1 text-center">Click Here Report Details</p>
                       </div>
@@ -365,7 +375,7 @@ export default function Dashboard() {
                     onChange={(e) => {
                       e.stopPropagation();
                       updateReportStatus(
-                        report.id,
+                        report.reportId,
                         e.target.value as ReportStatus
                       );
                     }}
@@ -413,6 +423,7 @@ export default function Dashboard() {
                 alt="Incident"
                 fill
                 className="object-contain"
+                quality={85}
               />
               <button
                 onClick={() => setZoomedImage(null)}

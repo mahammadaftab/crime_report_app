@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { ReportStatus, ReportType } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import cache from "@/lib/cache";
 
 export async function GET(req: Request) {
   try {
@@ -24,13 +25,20 @@ export async function GET(req: Request) {
       ...(type && { type }),
     };
 
-    // Add timeout protection
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Database connection timeout')), 5000)
-    );
+    // Create cache key based on filters
+    const cacheKey = `reports_${JSON.stringify({ where, page, limit })}`;
     
-    // Add pagination and optimize query with shorter timeout
-    const fetchPromise = Promise.all([
+    // Check cache first for non-admin users (admins might want fresh data)
+    if (session.user?.role !== "ADMIN") {
+      const cachedData = cache.get(cacheKey);
+      if (cachedData) {
+        console.log("Returning cached reports data");
+        return NextResponse.json(cachedData);
+      }
+    }
+
+    // Fetch reports without any timeout
+    const [reports, total] = await Promise.all([
       prisma.report.findMany({
         where,
         orderBy: {
@@ -56,10 +64,8 @@ export async function GET(req: Request) {
       }),
       prisma.report.count({ where })
     ]);
-    
-    const [reports, total] = await Promise.race([fetchPromise, timeoutPromise]) as Awaited<typeof fetchPromise>;
 
-    return NextResponse.json({
+    const responseData = {
       reports,
       pagination: {
         page,
@@ -67,7 +73,14 @@ export async function GET(req: Request) {
         total,
         pages: Math.ceil(total / limit)
       }
-    });
+    };
+    
+    // Cache the result for 1 minute for non-admin users
+    if (session.user?.role !== "ADMIN") {
+      cache.set(cacheKey, responseData);
+    }
+    
+    return NextResponse.json(responseData);
   } catch (error: unknown) {
     console.error("Failed to fetch reports:", error);
 
@@ -93,13 +106,31 @@ export async function GET(req: Request) {
     // Handle timeout errors specifically
     if (error instanceof Error && (error.message.includes("timeout") || error.message.includes("Can't reach database server"))) {
       return NextResponse.json(
-        { error: "Request timeout. Database is taking too long to respond. Please try again." },
+        { 
+          error: "Request timeout. Database is taking too long to respond. Please try again.",
+          reports: [], // Return empty array so UI doesn't break
+          pagination: {
+            page: 1,
+            limit: 50,
+            total: 0,
+            pages: 0
+          }
+        },
         { status: 504 }
       );
     }
 
     return NextResponse.json(
-      { error: "Failed to fetch reports. Please try again later." },
+      { 
+        error: "Failed to fetch reports. Please try again later.",
+        reports: [],
+        pagination: {
+          page: 1,
+          limit: 50,
+          total: 0,
+          pages: 0
+        }
+      },
       { status: 500 }
     );
   }

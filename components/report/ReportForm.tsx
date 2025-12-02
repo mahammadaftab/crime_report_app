@@ -251,6 +251,9 @@ export function ReportForm({ onComplete }: ReportFormProps) {
                   alt="Preview"
                   fill
                   className="object-cover"
+                  loading="lazy"
+                  quality={80}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
               <p className="text-xs text-zinc-400 sm:text-sm">Tap to change image</p>

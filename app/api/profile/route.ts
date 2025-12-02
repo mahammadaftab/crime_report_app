@@ -369,8 +369,8 @@ export async function PUT(request: Request) {
 
     // Fetch updated user with profile and rewards
     let finalUserResult: { id?: number; email?: string; name?: string; role?: string; emailVerified?: boolean; createdAt?: Date; updatedAt?: Date; password?: string; verificationOTP?: string | null; otpExpiresAt?: Date | null } | null = null;
-    let profile = null;
-    let rewards = null;
+    let finalProfile = null;
+    let finalRewards = null;
           
     if (isAdmin) {
       try {
@@ -380,7 +380,7 @@ export async function PUT(request: Request) {
             adminProfile: true,
           },
         });
-        profile = (finalUserResult as { adminProfile?: unknown } | null)?.adminProfile || null;
+        finalProfile = (finalUserResult as { adminProfile?: unknown } | null)?.adminProfile || null;
       } catch (error) {
         console.error("Error fetching admin profile:", error);
       }
@@ -392,7 +392,7 @@ export async function PUT(request: Request) {
             userProfile: true,
           },
         });
-        profile = (finalUserResult as { userProfile?: unknown } | null)?.userProfile || null;
+        finalProfile = (finalUserResult as { userProfile?: unknown } | null)?.userProfile || null;
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
@@ -415,12 +415,12 @@ export async function PUT(request: Request) {
         });
         
         if (userRewards.length > 0) {
-          rewards = userRewards[0];
+          finalRewards = userRewards[0];
         }
       } catch (rewardError) {
         console.error("Error fetching user rewards:", rewardError);
         // If there's an error with rewards, continue without them
-        rewards = null;
+        finalRewards = null;
       }
     }
 
@@ -446,8 +446,8 @@ export async function PUT(request: Request) {
         emailVerified: safeUser.emailVerified || false,
         createdAt: safeUser.createdAt,
         updatedAt: safeUser.updatedAt,
-        profile,
-        rewards,
+        profile: finalProfile,
+        rewards: finalRewards,
         isAdmin,
       };
       

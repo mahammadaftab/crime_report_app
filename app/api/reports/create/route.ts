@@ -22,6 +22,19 @@ export async function POST(request: Request) {
       reporterPhone,
     } = await request.json();
 
+    // Find user ID if session exists
+    let userId = null;
+    if (session?.user?.email) {
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: { id: true }
+      });
+      
+      if (user) {
+        userId = user.id;
+      }
+    }
+
     // Create the report
     const report = await prisma.report.create({
       data: {
@@ -36,12 +49,8 @@ export async function POST(request: Request) {
         reporterName: reporterName || null,
         reporterPhone: reporterPhone || null,
         // Associate with user if available
-        ...(session?.user?.email && {
-          user: {
-            connect: {
-              email: session.user.email,
-            },
-          },
+        ...(userId && {
+          userId: userId
         }),
       },
     });

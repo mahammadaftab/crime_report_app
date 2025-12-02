@@ -15,7 +15,12 @@ TITLE: Write a clear, brief title
 TYPE: Choose one (Theft, Fire Outbreak, Medical Emergency, Natural Disaster, Violence, or Other)
 DESCRIPTION: Write a clear, concise description`;
 
-    const result = await model.generateContent([
+    // Add timeout protection for external API call
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Image analysis timeout')), 10000)
+    );
+    
+    const generateContentPromise = model.generateContent([
       prompt,
       {
         inlineData: {
@@ -24,8 +29,11 @@ DESCRIPTION: Write a clear, concise description`;
         },
       },
     ]);
+    
+    const result = await Promise.race([generateContentPromise, timeoutPromise]) as Awaited<typeof generateContentPromise>;
 
-    const text = await result.response.text(); // Ensure text() is awaited
+    const textPromise = result.response.text(); // Ensure text() is awaited
+    const text = await Promise.race([textPromise, timeoutPromise]) as Awaited<typeof textPromise>;
 
     // Parse the response more precisely
     const titleMatch = text.match(/TITLE:\s*(.+)/);
@@ -39,6 +47,15 @@ DESCRIPTION: Write a clear, concise description`;
     });
   } catch (error) {
     console.error("Image analysis error:", error);
+    
+    // Handle timeout errors specifically
+    if (error instanceof Error && error.message.includes("timeout")) {
+      return NextResponse.json(
+        { error: "Image analysis timeout. Please try again with a smaller image." },
+        { status: 504 }
+      );
+    }
+    
     return NextResponse.json(
       { error: "Failed to analyze image" },
       { status: 500 }

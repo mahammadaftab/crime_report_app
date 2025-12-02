@@ -100,7 +100,7 @@ export default function Navbar() {
                 </svg>
               </motion.div>
               <span className="text-lg font-semibold text-white tracking-wide hidden sm:block">
-                PublicSafe App
+                Accident And Crime Report App
               </span>
             </Link>
 
@@ -112,6 +112,7 @@ export default function Navbar() {
                   <Link
                     key={href}
                     href={href}
+                    prefetch={href === "/submit-report" || href === "/track-report"}
                     className={`relative text-sm font-medium transition-colors duration-200 ${
                       isActive ? "text-white" : "text-zinc-400 hover:text-white"
                     }`}
@@ -226,6 +227,7 @@ export default function Navbar() {
                         <div className="py-2">
                           <Link
                             href="/auth"
+                            prefetch={true}
                             className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
                             onClick={() => setIsAuthDropdownOpen(false)}
                           >
@@ -262,6 +264,7 @@ export default function Navbar() {
                         <div className="py-2">
                           <Link
                             href="/profile"
+                            prefetch={true}
                             className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
                             onClick={() => setIsProfileDropdownOpen(false)}
                           >
@@ -272,6 +275,7 @@ export default function Navbar() {
                             <>
                               <Link
                                 href="/dashboard"
+                                prefetch={true}
                                 className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
                                 onClick={() => setIsProfileDropdownOpen(false)}
                               >
@@ -283,6 +287,7 @@ export default function Navbar() {
                             <>
                               <Link
                                 href="/leaderboard"
+                                prefetch={true}
                                 className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
                                 onClick={() => setIsProfileDropdownOpen(false)}
                               >
@@ -290,6 +295,7 @@ export default function Navbar() {
                               </Link>
                               <Link
                                 href="/rewards"
+                                prefetch={true}
                                 className="block px-4 py-2 text-sm text-zinc-300 hover:bg-sky-500/10 hover:text-sky-400 transition-colors"
                                 onClick={() => setIsProfileDropdownOpen(false)}
                               >
