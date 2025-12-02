@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { TopReporter } from "@/lib/types";
-
+import cache from "@/lib/cache";
 
 // Utility: standardized API responses
 function response(
@@ -21,6 +21,14 @@ function response(
 
 export async function GET() {
   try {
+    // Check cache first
+    const cacheKey = "leaderboard";
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+      console.log("Returning cached leaderboard data");
+      return response({ leaderboard: cachedData });
+    }
+
     // Add a timeout to prevent hanging
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('Database connection timeout')), 5000)
@@ -54,20 +62,27 @@ export async function GET() {
       name: reward.user?.name || 'Anonymous',
       points: reward.points,
       totalReports: reward.totalReports,
-      totalEarnings: parseFloat(reward.totalEarnings.toFixed(2)),
+      totalEarnings: reward.totalEarnings,
     }));
 
-    return response({
-      leaderboard,
-    });
+    // Cache the result for 5 minutes
+    cache.set(cacheKey, leaderboard);
+
+    return response({ leaderboard });
   } catch (error: unknown) {
-    console.error("Leaderboard API error:", error);
+    console.error("Failed to fetch leaderboard:", error);
     
     // Check if it's a database connection error
     if (error instanceof Error && (error.message.includes('Can\'t reach database server') || error.message.includes('timeout'))) {
-      return response({ error: "Service temporarily unavailable. Please try again later." }, 503);
+      return response(
+        { error: "Database connection unavailable. Please try again later." },
+        503
+      );
     }
     
-    return response({ error: "Internal server error" }, 500);
+    return response(
+      { error: "Failed to load leaderboard. Please try again later." },
+      500
+    );
   }
 }

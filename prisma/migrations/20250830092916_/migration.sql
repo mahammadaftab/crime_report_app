@@ -1,14 +1,26 @@
 -- CreateEnum
-CREATE TYPE "public"."ReportStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'RESOLVED', 'DISMISSED');
+DO $$ BEGIN
+    CREATE TYPE "public"."ReportStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'RESOLVED', 'DISMISSED');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateEnum
-CREATE TYPE "public"."ReportType" AS ENUM ('EMERGENCY', 'NON_EMERGENCY');
+DO $$ BEGIN
+    CREATE TYPE "public"."ReportType" AS ENUM ('EMERGENCY', 'NON_EMERGENCY');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateEnum
-CREATE TYPE "public"."Role" AS ENUM ('ADMIN', 'MODERATOR', 'USER');
+DO $$ BEGIN
+    CREATE TYPE "public"."Role" AS ENUM ('ADMIN', 'MODERATOR', 'USER');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateTable
-CREATE TABLE "public"."Report" (
+CREATE TABLE IF NOT EXISTS "public"."Report" (
     "id" TEXT NOT NULL,
     "reportId" TEXT NOT NULL,
     "type" "public"."ReportType" NOT NULL,
@@ -27,7 +39,7 @@ CREATE TABLE "public"."Report" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."User" (
+CREATE TABLE IF NOT EXISTS "public"."User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -38,10 +50,22 @@ CREATE TABLE "public"."User" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Report_reportId_key" ON "public"."Report"("reportId");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "Report_reportId_key" ON "public"."Report"("reportId");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE INDEX "Report_reportId_idx" ON "public"."Report"("reportId");
+DO $$ BEGIN
+    CREATE INDEX IF NOT EXISTS "Report_reportId_idx" ON "public"."Report"("reportId");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "User_email_key" ON "public"."User"("email");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;

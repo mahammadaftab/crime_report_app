@@ -1,8 +1,12 @@
 -- CreateEnum
-CREATE TYPE "public"."ContactStatus" AS ENUM ('RECEIVED', 'READ', 'RESPONDED', 'CLOSED');
+DO $$ BEGIN
+    CREATE TYPE "public"."ContactStatus" AS ENUM ('RECEIVED', 'READ', 'RESPONDED', 'CLOSED');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateTable
-CREATE TABLE "public"."ContactMessage" (
+CREATE TABLE IF NOT EXISTS "public"."ContactMessage" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(255) NOT NULL,

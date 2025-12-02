@@ -1,17 +1,33 @@
 -- CreateEnum
-CREATE TYPE "ReportStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'RESOLVED', 'DISMISSED', 'REJECTED');
+DO $$ BEGIN
+    CREATE TYPE "ReportStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'RESOLVED', 'DISMISSED', 'REJECTED');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateEnum
-CREATE TYPE "ReportType" AS ENUM ('EMERGENCY', 'NON_EMERGENCY');
+DO $$ BEGIN
+    CREATE TYPE "ReportType" AS ENUM ('EMERGENCY', 'NON_EMERGENCY');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'MODERATOR', 'USER');
+DO $$ BEGIN
+    CREATE TYPE "Role" AS ENUM ('ADMIN', 'MODERATOR', 'USER');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateEnum
-CREATE TYPE "ContactStatus" AS ENUM ('RECEIVED', 'READ', 'RESPONDED', 'CLOSED');
+DO $$ BEGIN
+    CREATE TYPE "ContactStatus" AS ENUM ('RECEIVED', 'READ', 'RESPONDED', 'CLOSED');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE IF NOT EXISTS "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -27,7 +43,7 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Admin" (
+CREATE TABLE IF NOT EXISTS "Admin" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -45,7 +61,7 @@ CREATE TABLE "Admin" (
 );
 
 -- CreateTable
-CREATE TABLE "UserProfile" (
+CREATE TABLE IF NOT EXISTS "UserProfile" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "phone" TEXT,
@@ -58,7 +74,7 @@ CREATE TABLE "UserProfile" (
 );
 
 -- CreateTable
-CREATE TABLE "AdminProfile" (
+CREATE TABLE IF NOT EXISTS "AdminProfile" (
     "id" SERIAL NOT NULL,
     "adminId" INTEGER NOT NULL,
     "phone" TEXT,
@@ -71,7 +87,7 @@ CREATE TABLE "AdminProfile" (
 );
 
 -- CreateTable
-CREATE TABLE "Report" (
+CREATE TABLE IF NOT EXISTS "Report" (
     "id" TEXT NOT NULL,
     "reportId" TEXT NOT NULL,
     "type" "ReportType" NOT NULL,
@@ -91,7 +107,7 @@ CREATE TABLE "Report" (
 );
 
 -- CreateTable
-CREATE TABLE "UserReward" (
+CREATE TABLE IF NOT EXISTS "UserReward" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "points" INTEGER NOT NULL DEFAULT 0,
@@ -105,7 +121,7 @@ CREATE TABLE "UserReward" (
 );
 
 -- CreateTable
-CREATE TABLE "RewardHistory" (
+CREATE TABLE IF NOT EXISTS "RewardHistory" (
     "id" SERIAL NOT NULL,
     "userRewardId" INTEGER NOT NULL,
     "pointsEarned" INTEGER NOT NULL,
@@ -118,7 +134,7 @@ CREATE TABLE "RewardHistory" (
 );
 
 -- CreateTable
-CREATE TABLE "ContactMessage" (
+CREATE TABLE IF NOT EXISTS "ContactMessage" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
@@ -132,40 +148,92 @@ CREATE TABLE "ContactMessage" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "User_email_key" ON "User"("email");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "Admin_email_key" ON "Admin"("email");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserProfile_userId_key" ON "UserProfile"("userId");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "UserProfile_userId_key" ON "UserProfile"("userId");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "AdminProfile_adminId_key" ON "AdminProfile"("adminId");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "AdminProfile_adminId_key" ON "AdminProfile"("adminId");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Report_reportId_key" ON "Report"("reportId");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "Report_reportId_key" ON "Report"("reportId");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserReward_userId_key" ON "UserReward"("userId");
+DO $$ BEGIN
+    CREATE UNIQUE INDEX IF NOT EXISTS "UserReward_userId_key" ON "UserReward"("userId");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- CreateIndex
-CREATE INDEX "Report_reportId_idx" ON "Report"("reportId");
+DO $$ BEGIN
+    CREATE INDEX IF NOT EXISTS "Report_reportId_idx" ON "Report"("reportId");
+EXCEPTION
+    WHEN duplicate_table THEN null;
+END $$;
 
 -- AddForeignKey
-ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+DO $$ BEGIN
+    ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- AddForeignKey
-ALTER TABLE "AdminProfile" ADD CONSTRAINT "AdminProfile_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+DO $$ BEGIN
+    ALTER TABLE "AdminProfile" ADD CONSTRAINT "AdminProfile_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- AddForeignKey
-ALTER TABLE "Report" ADD CONSTRAINT "Report_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+DO $$ BEGIN
+    ALTER TABLE "Report" ADD CONSTRAINT "Report_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- AddForeignKey
-ALTER TABLE "UserReward" ADD CONSTRAINT "UserReward_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+DO $$ BEGIN
+    ALTER TABLE "UserReward" ADD CONSTRAINT "UserReward_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- AddForeignKey
-ALTER TABLE "RewardHistory" ADD CONSTRAINT "RewardHistory_userRewardId_fkey" FOREIGN KEY ("userRewardId") REFERENCES "UserReward"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+DO $$ BEGIN
+    ALTER TABLE "RewardHistory" ADD CONSTRAINT "RewardHistory_userRewardId_fkey" FOREIGN KEY ("userRewardId") REFERENCES "UserReward"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- AddForeignKey
-ALTER TABLE "RewardHistory" ADD CONSTRAINT "RewardHistory_reportId_fkey" FOREIGN KEY ("reportId") REFERENCES "Report"("reportId") ON DELETE SET NULL ON UPDATE CASCADE;
+DO $$ BEGIN
+    ALTER TABLE "RewardHistory" ADD CONSTRAINT "RewardHistory_reportId_fkey" FOREIGN KEY ("reportId") REFERENCES "Report"("reportId") ON DELETE SET NULL ON UPDATE CASCADE;
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;

@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { User, Admin } from "@prisma/client";
+import cache from "@/lib/cache";
 
 // Utility: standardized API responses
 function response(
@@ -27,6 +28,14 @@ export async function GET() {
     
     if (!session?.user?.email) {
       return response({ error: "Unauthorized" }, 401);
+    }
+
+    // Check cache first
+    const cacheKey = `profile_${session.user.email}`;
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+      console.log("Returning cached profile data");
+      return response({ user: cachedData });
     }
 
     // First check in User table
@@ -159,15 +168,21 @@ export async function GET() {
       return response({ error: "User not found" }, 404);
     }
 
+    // Prepare user data to return
+    const userData = {
+      ...user,
+      profile,
+      rewards,
+      reports, // Include reports in the response
+      isAdmin,
+    };
+
+    // Cache the result for 1 minute (since profile data can change frequently)
+    cache.set(cacheKey, userData);
+
     // Return user data without sensitive information
     return response({
-      user: {
-        ...user,
-        profile,
-        rewards,
-        reports, // Include reports in the response
-        isAdmin,
-      },
+      user: userData,
     });
   } catch (error: unknown) {
     console.error("Profile GET error:", error);
@@ -349,6 +364,9 @@ export async function PUT(request: Request) {
       }
     }
 
+    // Clear cache for this user
+    cache.delete(`profile_${session.user.email}`);
+
     // Fetch updated user with profile and rewards
     let finalUserResult: { id?: number; email?: string; name?: string; role?: string; emailVerified?: boolean; createdAt?: Date; updatedAt?: Date; password?: string; verificationOTP?: string | null; otpExpiresAt?: Date | null } | null = null;
     let profile = null;
@@ -419,20 +437,25 @@ export async function PUT(request: Request) {
         updatedAt: finalUserResult.updatedAt
       };
       
+      // Cache the updated profile data
+      const updatedUserData = {
+        id: safeUser.id,
+        email: safeUser.email,
+        name: safeUser.name,
+        role: safeUser.role,
+        emailVerified: safeUser.emailVerified || false,
+        createdAt: safeUser.createdAt,
+        updatedAt: safeUser.updatedAt,
+        profile,
+        rewards,
+        isAdmin,
+      };
+      
+      cache.set(`profile_${finalUserResult.email || session.user.email}`, updatedUserData);
+      
       return response({
         message: "Profile updated successfully",
-        user: {
-          id: safeUser.id,
-          email: safeUser.email,
-          name: safeUser.name,
-          role: safeUser.role,
-          emailVerified: safeUser.emailVerified || false,
-          createdAt: safeUser.createdAt,
-          updatedAt: safeUser.updatedAt,
-          profile,
-          rewards,
-          isAdmin,
-        },
+        user: updatedUserData,
       });
     } else {
       return response({ error: "Failed to fetch updated user data" }, 500);
