@@ -38,6 +38,8 @@ export async function GET() {
       return response({ user: cachedData });
     }
 
+
+    
     // First check in User table
     let userResult: (User & { userProfile: { id: number; userId: number; phone: string | null; address: string | null; dateOfBirth: Date | null; createdAt: Date; updatedAt: Date; } | null }) | null = null;
     let isAdmin = false;
