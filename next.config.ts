@@ -1,29 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Configure webpack to exclude nodemailer from client-side bundle
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Mark nodemailer as external for client-side builds
-      config.externals.push('nodemailer');
-    }
-    return config;
-  },
-  // Ensure nodemailer only runs on server
-  serverExternalPackages: ['nodemailer'],
-  
-  // Vercel serverless function configuration and Turbopack settings
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-      },
-    },
-  },
+  // Ensure packages only run on server
+  serverExternalPackages: ['nodemailer', '@prisma/client', 'prisma'],
 };
 
 export default nextConfig;
