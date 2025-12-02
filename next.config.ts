@@ -11,6 +11,19 @@ const nextConfig: NextConfig = {
   },
   // Ensure nodemailer only runs on server
   serverExternalPackages: ['nodemailer'],
+  
+  // Vercel serverless function configuration and Turbopack settings
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
+  },
 };
 
 export default nextConfig;
