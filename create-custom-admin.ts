@@ -5,8 +5,8 @@ async function createCustomAdmin() {
   const prisma = new PrismaClient();
   
   // Get email and password from command line arguments
-  const email = process.argv[2] || 'aftab123@gmail.com';
-  const password = process.argv[3] || 'Aftab@123';
+  const email = process.argv[2] || 'admin@gmail.com';
+  const password = process.argv[3] || '123456789';
   const name = process.argv[4] || 'Mahammad Aftab';
   
   try {
@@ -54,6 +54,15 @@ async function createCustomAdmin() {
     // Check if it's a duplicate email error
     if (typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002') {
       console.log('⚠️  Admin user might already exist. Try a different email or check your database.');
+    }
+    
+    // Check if it's a connection error
+    if (typeof error === 'object' && error !== null && 'message' in error && (error as { message?: string }).message?.includes('Can\'t reach database server')) {
+      console.log('⚠️  Database connection failed. Please check your database connection or try using a local database.');
+      console.log('💡 Try these solutions:');
+      console.log('   1. Check if your Neon database is running');
+      console.log('   2. Verify your DATABASE_URL in .env file');
+      console.log('   3. Try using a local PostgreSQL database for development');
     }
   } finally {
     await prisma.$disconnect();

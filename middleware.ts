@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 async function customMiddleware(request: NextRequest) {
   // Allow access to the create and details endpoints for anonymous reporting
   if (request.nextUrl.pathname === '/api/reports/create' || 
-      request.nextUrl.pathname.match(/^\/api\/reports\/[^\/]+\/details$/)) {
+      request.nextUrl.pathname.endsWith('/details')) {
     return NextResponse.next();
   }
   
@@ -33,6 +33,6 @@ export default customMiddleware;
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/api/reports/:path+',
+    '/api/reports/:path*',
   ]
 };
