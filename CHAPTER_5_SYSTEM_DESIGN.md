@@ -277,7 +277,28 @@ The notification system manages all user communications and alerts:
 
 ## 5.3 System Workflow
 
-### 5.3.1 User Report Submission Workflow
+### 5.3.1 User Registration and Authentication Workflow
+
+```mermaid
+graph TD
+    A[User Visits App] --> B[Click Sign Up]
+    B --> C[Enter Email Address]
+    C --> D[System Sends OTP]
+    D --> E[User Receives Email]
+    E --> F[Enter OTP Code]
+    F --> G{OTP Valid?}
+    G -->|Yes| H[Set Password]
+    H --> I[Account Created]
+    G -->|No| J[Error Message]
+    J --> F
+    I --> K[Redirect to Login]
+    K --> L[Enter Credentials]
+    L --> M{Valid Login?}
+    M -->|Yes| N[Access Dashboard]
+    M -->|No| O[Login Error]
+```
+
+### 5.3.2 User Report Submission Workflow
 
 ```mermaid
 graph TD
@@ -293,7 +314,7 @@ graph TD
     J --> K[Send Email Notification]
 ```
 
-### 5.3.2 Admin Report Management Workflow
+### 5.3.3 Admin Report Management Workflow
 
 ```mermaid
 graph TD
@@ -307,7 +328,7 @@ graph TD
     H --> I[Send User Notification]
 ```
 
-### 5.3.3 Reward System Workflow
+### 5.3.4 Reward System Workflow
 
 ```mermaid
 graph TD
@@ -319,6 +340,69 @@ graph TD
     F --> G[Record Transaction History]
     G --> H[Update Leaderboard]
     H --> I[Notify User of Points]
+```
+
+### 5.3.5 Emergency Detection and Response Workflow
+
+```mermaid
+graph TD
+    A[Device Sensors Active] --> B[Continuous Monitoring]
+    B --> C[Anomaly Detected]
+    C --> D[Pattern Analysis]
+    D --> E{Emergency Confirmed?}
+    E -->|Yes| F[Browser Notification]
+    F --> G[User Confirmation Dialog]
+    G --> H{User Confirms?}
+    H -->|Yes| I[Dial Emergency Service]
+    H -->|No| J[Cancel Call]
+    E -->|No| K[Continue Monitoring]
+```
+
+### 5.3.6 AI Image Analysis Workflow
+
+```mermaid
+graph TD
+    A[User Uploads Image] --> B[Convert to Base64]
+    B --> C[Prepare AI Prompt]
+    C --> D[Send to Gemini AI]
+    D --> E[AI Processes Image]
+    E --> F[Generate Structured Response]
+    F --> G[Parse AI Output]
+    G --> H[Return Data to Frontend]
+    H --> I[User Reviews Details]
+    I --> J[Confirm or Edit]
+```
+
+### 5.3.7 Report Tracking Workflow
+
+```mermaid
+graph TD
+    A[User Submits Report] --> B[Receive Report ID]
+    B --> C[Access Track Report Page]
+    C --> D[Enter Report ID]
+    D --> E[Query Database]
+    E --> F[Retrieve Report Status]
+    F --> G[Display Status Details]
+    G --> H[Show Timeline]
+    H --> I[Periodic Updates]
+    I --> F
+```
+
+### 5.3.8 Points Redemption Workflow
+
+```mermaid
+graph TD
+    A[User Accesses Rewards Page] --> B[View Available Points]
+    B --> C[Select Redemption Option]
+    C --> D[Enter Points to Redeem]
+    D --> E[Validate Points Balance]
+    E --> F{Sufficient Points?}
+    F -->|Yes| G[Calculate Cash Value]
+    G --> H[Process Redemption]
+    H --> I[Update Points Balance]
+    I --> J[Record Transaction]
+    J --> K[Notify User]
+    F -->|No| L[Insufficient Points Error]
 ```
 
 ## 5.4 Advantages of the Proposed System
