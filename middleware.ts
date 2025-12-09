@@ -4,8 +4,9 @@ import { NextRequest } from "next/server";
 
 // Custom middleware function
 async function customMiddleware(request: NextRequest) {
-  // Allow access to the create and details endpoints for anonymous reporting
+  // Allow access to the create, count and details endpoints for anonymous reporting
   if (request.nextUrl.pathname === '/api/reports/create' || 
+      request.nextUrl.pathname === '/api/reports/count' ||
       request.nextUrl.pathname.endsWith('/details')) {
     return NextResponse.next();
   }

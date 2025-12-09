@@ -331,47 +331,7 @@ export default function Home() {
           ))}
         </motion.div>
 
-        {/* Testimonials */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-          className="mt-16"
-        >
-          <h3 className="text-xl font-bold text-white text-center mb-8">What Our Contributors Say</h3>
-          
-          <div className="grid gap-6 sm:grid-cols-2">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: index === 0 ? -20 : 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 1.3 + index * 0.1 }}
-                className="rounded-xl bg-zinc-900/80 p-6 border border-white/10 backdrop-blur-sm"
-              >
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-blue-600 text-white font-bold">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-semibold text-white">{testimonial.name}</h4>
-                        <p className="text-sm text-zinc-400">{testimonial.role}</p>
-                      </div>
-                      <div className="inline-flex items-center rounded-full bg-amber-500/10 px-2 py-1 text-xs font-medium text-amber-400">
-                        {testimonial.points}
-                      </div>
-                    </div>
-                    <p className="mt-3 text-zinc-300 italic">&quot;{testimonial.content}&quot;</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        
 
         {/* Stats Section */}
         <motion.div 

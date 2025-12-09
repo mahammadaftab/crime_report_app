@@ -2,6 +2,9 @@
 
 ## 1.1 Preamble
 
+![Project Overview](./screenshots/project_overview.png)
+*Figure 1.1: Accident and Crime Report App Interface*
+
 In today's rapidly evolving digital landscape, ensuring public safety and security has become a paramount concern for communities worldwide. The traditional methods of reporting accidents and criminal activities often involve lengthy procedures, lack of anonymity, and delayed response times, which can discourage citizens from actively participating in community safety initiatives. 
 
 The "Accident and Crime Report App" represents a significant advancement in addressing these challenges by providing a modern, secure, and user-friendly platform for anonymous incident reporting. This innovative solution leverages cutting-edge web technologies to bridge the gap between citizens and law enforcement agencies while maintaining the highest standards of privacy and security.
@@ -19,6 +22,9 @@ Traditional crime and accident reporting systems primarily rely on conventional 
 3. **Email and Web Forms**: Some organizations provide email addresses or basic online forms for reporting incidents, but these often lack sophisticated verification mechanisms and real-time tracking capabilities.
 
 4. **Manual Record Keeping**: Reported incidents are typically recorded in physical registers or basic digital systems without advanced categorization, analysis, or follow-up mechanisms.
+
+![Traditional Reporting Methods](./screenshots/traditional_reporting.png)
+*Figure 1.2: Conventional Reporting Approaches*
 
 These conventional approaches suffer from several drawbacks, including limited accessibility, lack of anonymity, delayed response times, and inefficient data management. Additionally, they often fail to provide feedback to reporters about the status of their submissions, leading to decreased public confidence in the reporting process.
 
@@ -41,6 +47,9 @@ Despite their widespread use, traditional reporting systems exhibit significant 
 7. **Inadequate Evidence Collection**: Existing systems rarely facilitate the submission of photographic or multimedia evidence, which can be crucial for investigation purposes.
 
 8. **Lack of Incentivization**: Traditional reporting methods do not provide any mechanism to encourage community participation or recognize active contributors.
+
+![Limitations Visualization](./screenshots/system_limitations.png)
+*Figure 1.3: Challenges in Traditional Reporting Systems*
 
 ## 1.4 Proposed System
 
@@ -65,6 +74,9 @@ The proposed "Accident and Crime Report App" addresses the shortcomings of exist
 9. **Emergency Auto-Call**: Automatic notification to emergency services for critical incidents detected through AI analysis or user classification.
 
 10. **Performance Optimization**: Modern web technologies and optimization techniques ensure fast loading times and smooth user experience across all device types.
+
+![Proposed System Architecture](./screenshots/proposed_system.png)
+*Figure 1.4: Accident and Crime Report App Features*
 
 ## 1.5 Problem Statement
 
@@ -96,6 +108,9 @@ The development of the "Accident and Crime Report App" is guided by the followin
 
 10. **Demonstrate Technical Proficiency**: Showcase the application of modern full-stack development practices, including Next.js, TypeScript, PostgreSQL, and cloud-based services.
 
+![Project Objectives](./screenshots/objectives.png)
+*Figure 1.5: Key Development Objectives*
+
 ## 1.7 Scope
 
 The scope of the "Accident and Crime Report App" encompasses a comprehensive solution for anonymous incident reporting that addresses multiple aspects of public safety and community engagement. The application is designed to serve diverse user groups including general citizens, witnesses, victims, and law enforcement personnel.
@@ -125,3 +140,6 @@ The scope of the "Accident and Crime Report App" encompasses a comprehensive sol
 - Geographic coverage is dependent on Mapbox services and may vary by region.
 - The reward system is virtual and does not integrate with external payment systems for monetary incentives.
 - The application requires internet connectivity for all functionalities and does not support offline report submission.
+
+![System Scope](./screenshots/scope.png)
+*Figure 1.6: Project Scope and Coverage*
