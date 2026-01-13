@@ -18,7 +18,7 @@ The system follows a modern client-server architecture with distinct frontend, b
 
 #### High-Level Architecture
 
-```mermaid
+```
 graph TB
     A[Client Browser] --> B[Next.js Frontend]
     B --> C[Next.js API Routes]
@@ -61,7 +61,7 @@ graph TB
 
 The system implements a secure data flow architecture that maintains user anonymity while ensuring data integrity and accessibility for authorized personnel:
 
-```mermaid
+```
 graph LR
     A[User] --> B[Frontend Interface]
     B --> C[Authentication Layer]
@@ -279,7 +279,9 @@ The notification system manages all user communications and alerts:
 
 ### 5.3.1 User Registration and Authentication Workflow
 
-```mermaid
+This workflow illustrates the complete user registration and authentication process, from initial sign-up through email verification to final login. The system ensures secure account creation through OTP verification and proper credential validation before granting access.
+
+```
 graph TD
     A[User Visits App] --> B[Click Sign Up]
     B --> C[Enter Email Address]
@@ -298,9 +300,13 @@ graph TD
     M -->|No| O[Login Error]
 ```
 
+The authentication workflow ensures that only verified users can access the system while maintaining security through multi-step verification and proper error handling for invalid attempts.
+
 ### 5.3.2 User Report Submission Workflow
 
-```mermaid
+This workflow demonstrates the process of submitting an incident report, from initial form access through AI analysis to final database storage. Users can provide detailed incident information with visual evidence that gets automatically categorized by the AI system.
+
+```
 graph TD
     A[User Accesses Submit Report Page] --> B[Select Incident Type]
     B --> C[Upload Image Evidence]
@@ -314,9 +320,13 @@ graph TD
     J --> K[Send Email Notification]
 ```
 
+The report submission workflow streamlines the incident documentation process while leveraging AI technology to extract meaningful information from visual evidence and ensure proper data storage.
+
 ### 5.3.3 Admin Report Management Workflow
 
-```mermaid
+This workflow shows how administrative personnel manage and process incident reports through the dashboard interface. Administrators can review reports, update statuses, and trigger automated processes such as reward distribution and user notifications.
+
+```
 graph TD
     A[Admin Logs into Dashboard] --> B[View All Reports]
     B --> C[Filter by Status/Type]
@@ -328,9 +338,13 @@ graph TD
     H --> I[Send User Notification]
 ```
 
+The admin management workflow provides a comprehensive system for overseeing incident reports while ensuring timely processing and appropriate communication with users who submitted the reports.
+
 ### 5.3.4 Reward System Workflow
 
-```mermaid
+This workflow details the process of awarding and managing reward points for user contributions to incident reporting. Points are automatically distributed for verified reports and can be tracked through the user's profile and leaderboard rankings.
+
+```
 graph TD
     A[Report Submitted] --> B[Admin Review]
     B --> C{Report Verified?}
@@ -342,9 +356,13 @@ graph TD
     H --> I[Notify User of Points]
 ```
 
+The reward system workflow creates a positive feedback loop that encourages community participation while maintaining transparency through detailed transaction tracking and public leaderboard displays.
+
 ### 5.3.5 Emergency Detection and Response Workflow
 
-```mermaid
+This workflow illustrates the automatic emergency detection system that monitors device sensors and responds to potential emergency situations. The system provides immediate notifications and can automatically contact emergency services with user confirmation.
+
+```
 graph TD
     A[Device Sensors Active] --> B[Continuous Monitoring]
     B --> C[Anomaly Detected]
@@ -358,9 +376,13 @@ graph TD
     E -->|No| K[Continue Monitoring]
 ```
 
+The emergency detection workflow provides critical life-saving functionality while incorporating user confirmation to prevent false alarms and ensure appropriate emergency response activation.
+
 ### 5.3.6 AI Image Analysis Workflow
 
-```mermaid
+This workflow shows the process of analyzing incident images using Google's Gemini AI to extract contextual information and categorize reports. The system converts images to appropriate formats and structures AI responses for user confirmation.
+
+```
 graph TD
     A[User Uploads Image] --> B[Convert to Base64]
     B --> C[Prepare AI Prompt]
@@ -373,9 +395,13 @@ graph TD
     I --> J[Confirm or Edit]
 ```
 
+The AI analysis workflow automates the extraction of valuable information from incident images while allowing users to verify and adjust AI-generated content for accuracy.
+
 ### 5.3.7 Report Tracking Workflow
 
-```mermaid
+This workflow demonstrates how users can track the status of their submitted reports through the unique identification system. Users can access real-time updates on their report's progress and view detailed status histories.
+
+```
 graph TD
     A[User Submits Report] --> B[Receive Report ID]
     B --> C[Access Track Report Page]
@@ -388,9 +414,13 @@ graph TD
     I --> F
 ```
 
+The report tracking workflow provides transparency and peace of mind to users by offering continuous visibility into the processing status of their incident reports.
+
 ### 5.3.8 Points Redemption Workflow
 
-```mermaid
+This workflow outlines the process by which users can convert their accumulated reward points into monetary value. The system validates point balances and processes redemptions while maintaining accurate transaction records.
+
+```
 graph TD
     A[User Accesses Rewards Page] --> B[View Available Points]
     B --> C[Select Redemption Option]
@@ -404,6 +434,8 @@ graph TD
     J --> K[Notify User]
     F -->|No| L[Insufficient Points Error]
 ```
+
+The points redemption workflow enables users to realize tangible value from their community contributions while ensuring proper balance validation and transaction tracking.
 
 ## 5.4 Advantages of the Proposed System
 

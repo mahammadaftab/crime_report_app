@@ -437,7 +437,96 @@ Scalability improvements:
 - Load distribution mechanisms
 - Global accessibility features
 
-## 7.10 Conclusion
+## 7.10 Tracking System
+
+The report tracking system provides users with a convenient way to monitor the status of their submitted reports. This feature enhances transparency and keeps users informed about the progress of their incident reports.
+
+### 7.10.1 Tracking Mechanism
+
+The tracking system uses a unique report ID generated at the time of submission to identify and retrieve report details. When a user submits a report, the system generates a 16-character alphanumeric report ID using a combination of timestamp and cryptographic random bytes, which is then hashed using SHA-256 and truncated to ensure uniqueness.
+
+Key aspects of the tracking mechanism:
+- Unique report ID generation for each submission
+- Real-time status updates through API endpoints
+- User-friendly interface with copy/paste functionality
+- Direct URL access with report ID parameter
+
+### 7.10.2 User Interface Features
+
+The tracking interface is designed for simplicity and ease of use:
+
+1. **Report ID Input**: Users can enter their report ID manually or paste it from their clipboard
+2. **Direct Access**: Users can access tracking directly through URLs with report ID parameters
+3. **Status Visualization**: Clear display of report status with color-coded indicators
+4. **Information Display**: Comprehensive view of report details including title, description, location, and submission date
+5. **Copy Functionality**: Easy copying of report IDs for reference
+
+### 7.10.3 Status Indicators
+
+The system provides clear visual indicators for different report statuses:
+- Pending (yellow): Report submitted but not yet reviewed
+- Processing (blue): Report under investigation
+- Resolved (green): Report addressed and resolved
+- Dismissed/Rejected (red): Report determined to be invalid or duplicate
+
+### 7.10.4 Technical Implementation
+
+The tracking system is implemented through a dedicated API endpoint that retrieves report details based on the report ID. The frontend uses React hooks for state management and implements smooth transitions between the input form and results display.
+
+## 7.11 Contact Us Functionality
+
+The Contact Us feature provides users with a direct communication channel to reach out to the system administrators for support, inquiries, or feedback.
+
+### 7.11.1 Contact Methods
+
+Users can reach out through multiple channels:
+- Email: support@crimeapp.com
+- Phone: +91 89705 80082
+- Physical Address: Gadag, Karnataka, India
+- Online Form: Integrated contact form on the website
+
+### 7.11.2 Online Contact Form
+
+The online contact form offers a convenient way for users to send messages directly through the platform:
+
+1. **Form Fields**:
+   - Name (required)
+   - Email (required)
+   - Message (required, 10-5000 characters)
+
+2. **Validation**:
+   - Client-side validation for required fields
+   - Email format validation
+   - Message length validation
+
+3. **Submission Process**:
+   - Secure transmission through HTTPS
+   - Server-side validation and sanitization
+   - Database storage with IP tracking
+   - Success/error feedback to users
+
+### 7.11.3 Backend Implementation
+
+The contact system is powered by a dedicated API endpoint that:
+- Validates incoming data using Zod schema validation
+- Stores messages in the database with proper indexing
+- Captures client IP addresses for spam prevention
+- Provides administrative access to view messages
+- Implements error handling for database connectivity issues
+
+### 7.11.4 Database Structure
+
+Contact messages are stored in a dedicated table with the following fields:
+- ID: Auto-incrementing primary key
+- Name: User's name (up to 100 characters)
+- Email: User's email address (up to 255 characters)
+- Message: User's message content (TEXT field)
+- Status: Message status (Received, Read, Responded, Closed)
+- IP: Client IP address for security purposes
+- Created At: Timestamp of message submission
+- Updated At: Timestamp of last modification
+
+## 7.12 Conclusion
 
 The results demonstrate that the Accident and Crime Report App successfully addresses the identified problems and meets the project objectives. The implementation of advanced algorithms, secure authentication systems, and user-friendly interfaces has created a robust platform for incident reporting and community safety enhancement. Performance metrics indicate efficient operation, while user feedback confirms high satisfaction with the application's functionality and design.
 

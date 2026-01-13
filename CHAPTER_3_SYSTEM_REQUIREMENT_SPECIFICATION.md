@@ -4,6 +4,9 @@
 
 The functional requirements define the specific behaviors and capabilities of the Accident and Crime Report App. These requirements outline what the system must do to fulfill its intended purpose of providing a secure, anonymous platform for incident reporting.
 
+![Functional Requirements Overview](./screenshots/functional_requirements.png)
+*Figure 3.1: Functional Requirements Architecture*
+
 ### 3.1.1 User Registration and Authentication
 
 1. **User Registration**
@@ -30,6 +33,9 @@ The functional requirements define the specific behaviors and capabilities of th
    - The system shall redirect users based on their role (ADMIN or USER).
    - The system shall provide a secure logout mechanism.
 
+![Authentication Flow](./screenshots/authentication_flow.png)
+*Figure 3.2: User Authentication Process*
+
 ### 3.1.2 Incident Reporting
 
 1. **Anonymous Reporting**
@@ -47,6 +53,9 @@ The functional requirements define the specific behaviors and capabilities of th
    - The system shall allow users to classify incidents as emergency or non-emergency.
    - The system shall route emergency reports to appropriate response channels.
 
+![Incident Reporting Interface](./screenshots/incident_reporting.png)
+*Figure 3.3: Incident Reporting Form*
+
 ### 3.1.3 AI-Powered Analysis
 
 1. **Image Analysis**
@@ -59,12 +68,18 @@ The functional requirements define the specific behaviors and capabilities of th
    - The system shall analyze report content to extract key information.
    - The system shall categorize reports based on content analysis.
 
+![AI Analysis Dashboard](./screenshots/ai_analysis.png)
+*Figure 3.4: AI-Powered Content Analysis*
+
 ### 3.1.4 Location Services
 
 1. **Map Integration**
    - The system shall integrate with Mapbox for location services.
    - The system shall allow users to specify incident locations through map interaction.
    - The system shall provide precise geographic coordinates for reported incidents.
+
+![Map Integration](./screenshots/map_integration.png)
+*Figure 3.5: Mapbox Location Services*
 
 ### 3.1.5 Report Management
 
@@ -78,6 +93,9 @@ The functional requirements define the specific behaviors and capabilities of th
    - The system shall allow admins to view, manage, and update report statuses.
    - The system shall provide analytics and reporting capabilities for admins.
 
+![Admin Dashboard](./screenshots/admin_dashboard.png)
+*Figure 3.6: Administrative Management Interface*
+
 ### 3.1.6 Reward System
 
 1. **Points System**
@@ -89,15 +107,24 @@ The functional requirements define the specific behaviors and capabilities of th
    - The system shall allow users to redeem accumulated points for rewards.
    - The system shall track reward redemption history.
 
+![Reward System](./screenshots/reward_system.png)
+*Figure 3.7: Points-Based Reward Mechanism*
+
 ### 3.1.7 Emergency Services
 
 1. **Auto-Notification**
    - The system shall automatically notify emergency services for critical incidents.
    - The system shall identify critical incidents through AI analysis or user classification.
 
+![Emergency Services](./screenshots/emergency_services.png)
+*Figure 3.8: Emergency Notification System*
+
 ## 3.2 Non-Functional Requirements
 
 Non-functional requirements define the quality attributes and constraints of the system that are not directly related to specific behaviors but are essential for the system's success.
+
+![Non-Functional Requirements](./screenshots/non_functional_requirements.png)
+*Figure 3.9: Quality Attributes Framework*
 
 ### 3.2.1 Performance Requirements
 
@@ -131,6 +158,9 @@ Non-functional requirements define the quality attributes and constraints of the
    - The system shall implement secure password storage using bcrypt hashing.
    - The system shall enforce strong password policies.
    - The system shall implement session timeouts for inactive users.
+
+![Security Framework](./screenshots/security_framework.png)
+*Figure 3.10: Security Implementation Layers*
 
 ### 3.2.3 Usability Requirements
 
@@ -171,6 +201,9 @@ Non-functional requirements define the quality attributes and constraints of the
 ## 3.3 Software Requirements
 
 The software requirements specify the technology stack and development tools needed to build and deploy the Accident and Crime Report App.
+
+![Technology Stack](./screenshots/tech_stack.png)
+*Figure 3.11: Development Technology Stack*
 
 ### 3.3.1 Development Environment
 
@@ -246,6 +279,9 @@ The software requirements specify the technology stack and development tools nee
 ## 3.4 Hardware Requirements
 
 The hardware requirements specify the minimum and recommended hardware specifications for running the Accident and Crime Report App.
+
+![Hardware Requirements](./screenshots/hardware_requirements.png)
+*Figure 3.12: Infrastructure Specifications*
 
 ### 3.4.1 Server-Side Requirements
 

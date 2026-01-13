@@ -2,6 +2,9 @@
 
 ## 2.1 Introduction to Literature Review
 
+![Literature Review Overview](./screenshots/literature_review.png)
+*Figure 2.1: Literature Survey Process*
+
 The development of modern crime and accident reporting systems has evolved significantly with advances in technology, particularly in the domains of web development, artificial intelligence, and geospatial mapping. A comprehensive literature review reveals that contemporary research focuses on enhancing user privacy, improving response times, and leveraging advanced analytics for better incident management.
 
 The literature survey encompasses various aspects of digital crime reporting platforms, including anonymous reporting mechanisms, AI-powered analysis, location-based services, and user engagement strategies. This review provides a foundation for understanding the current state of the art in crime reporting systems and identifies gaps that the proposed "Accident and Crime Report App" aims to address.
@@ -14,6 +17,9 @@ The review examines existing systems, their technological foundations, and their
 
 Traditional crime reporting systems have primarily relied on telephone hotlines, physical reporting at police stations, and basic web forms. According to Wiredu et al. (2024), these systems suffer from significant limitations including limited accessibility, lack of anonymity, and inefficient data management. The study emphasizes the importance of effective crime reporting mechanisms for law enforcement and community safety, highlighting the need for improved accessibility and user experience.
 
+![Traditional Systems](./screenshots/traditional_systems.png)
+*Figure 2.2: Conventional Crime Reporting Methods*
+
 ### 2.2.2 Decision Support Systems for Crime Analysis
 
 Research by Al-Sabbagh et al. (2014) presents a decision support system (DSS) that integrates natural language processing (NLP), similarity measures, and machine learning techniques, specifically a Naïve Bayes classifier, to automatically analyze and classify crime reports. The DSS achieved an accuracy of 87% in initial evaluations and 94.82% in larger dataset evaluations, demonstrating the potential of automated analysis to improve the handling of anonymous reports.
@@ -21,6 +27,9 @@ Research by Al-Sabbagh et al. (2014) presents a decision support system (DSS) th
 ### 2.2.3 Anonymous Reporting Systems
 
 The Say Something Anonymous Reporting System (SS-ARS) was evaluated by researchers from the University of Michigan, funded by the U.S. Department of Justice (2023). The study found that anonymous reporting systems can enhance school safety and connectedness, with the program positively influencing students' self-efficacy in identifying and reporting warning signs. However, successful implementation requires addressing specific barriers and ensuring proper implementation fidelity.
+
+![Anonymous Reporting](./screenshots/anonymous_reporting.png)
+*Figure 2.3: Anonymous Reporting Mechanisms*
 
 ### 2.2.4 Online Crime Reporting Portals
 
@@ -30,6 +39,9 @@ Research conducted by scholars from Portland State University and the Portland P
 
 A study on alternative and anonymous reporting systems for sexual assault in Australia (2025) examined platforms that allow victims to report incidents without initiating formal investigations. The research indicates strong support from victim-survivors for these options, as they provide a sense of control and safety in documenting their experiences. However, there is a notable lack of transparency regarding police responses to these anonymous reports, raising concerns about their effectiveness in addressing sexual offences.
 
+![Alternative Reporting](./screenshots/alternative_reporting.png)
+*Figure 2.4: Alternative Reporting Platforms*
+
 ### 2.2.6 AI Applications in Crime Prediction and Analysis
 
 A systematic literature review by Ahmed et al. (2022) explored various AI strategies and methodologies used to analyze and predict crime rates. The study evaluated 120 research papers published from 2008 to 2021, identifying 34 crime categories and 23 distinct crime analysis methodologies. The review highlights the prevalence of supervised learning techniques and discusses performance metrics, evaluation tools, and the strengths and weaknesses of different AI approaches in crime prediction.
@@ -37,6 +49,9 @@ A systematic literature review by Ahmed et al. (2022) explored various AI strate
 ### 2.2.7 AI in Forensic Image Analysis
 
 Research on AI as a decision support tool in forensic image analysis (2025) explores the integration of large language models like ChatGPT-4, Claude, and Gemini into crime scene investigation workflows. The study assesses their effectiveness in analyzing forensic images, with a focus on their potential to assist human experts. Findings indicate that AI can serve as a rapid initial screening tool, enhancing the efficiency of forensic analysis, particularly in complex cases with multiple evidence points.
+
+![AI in Forensics](./screenshots/ai_forensics.png)
+*Figure 2.5: AI Applications in Forensic Analysis*
 
 ### 2.2.8 Predictive Policing and Explainable AI
 
@@ -54,6 +69,9 @@ A survey by Corasaniti et al. (2024) on artificial intelligence in crime predict
 | Ahmed et al. (2022) | AI Crime Prediction | Supervised learning, 34 crime categories | Enhanced predictive capabilities | XAI integration lacking |
 | PMC (2025) | AI Forensic Analysis | Large language models, image analysis | Rapid screening tool | Struggles with evidence identification |
 | Corasaniti et al. (2024) | Predictive Policing AI | Pattern recognition, crime anticipation | Improved crime prevention | Explainability underdeveloped |
+
+![Survey Summary](./screenshots/survey_summary.png)
+*Figure 2.6: Literature Survey Summary Table*
 
 ### Technology Integration in Modern Crime Reporting Systems
 
@@ -84,3 +102,6 @@ While existing literature provides valuable insights into crime reporting system
 5. **Real-time Emergency Response**: Limited research focuses on automatic emergency service notifications based on AI analysis of incident reports.
 
 The proposed "Accident and Crime Report App" addresses these gaps by integrating advanced web technologies, AI-powered analysis, location-based services, and community incentivization mechanisms into a unified platform that prioritizes user privacy while enhancing law enforcement capabilities.
+
+![Gap Analysis](./screenshots/gap_analysis.png)
+*Figure 2.7: Identified Research Gaps*
